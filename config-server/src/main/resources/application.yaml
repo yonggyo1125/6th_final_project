@@ -1,0 +1,42 @@
+server:
+  port: 13100
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: git
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/yonggyo1125/6th_final_project
+          default-label: main
+          search-paths:
+            - configs/common
+            - configs/{application}
+          clone-on-start: true
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: ${HOSTNAME:localhost}
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:13101/eureka/}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info,metrics
+  tracing:
+    sampling:
+      probability: 0.1
+    zipkin:
+      tracing:
+        endpoint: "${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}"
