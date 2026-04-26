@@ -1,9 +1,9 @@
 package org.sparta.monitoringserver.agent.application;
 
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
 public interface AiAgent {
-    Mono<AgentResponse> assignTask(String agentName, Map<String, Object> inputs);
+    Flux<AgentResponse> assignTask(String promptName, Map<String, Object> inputs);
 }
