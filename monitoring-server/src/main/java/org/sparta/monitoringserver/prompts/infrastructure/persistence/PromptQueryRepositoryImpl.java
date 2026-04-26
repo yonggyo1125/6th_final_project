@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Repository
 @RequiredArgsConstructor
 public class PromptQueryRepositoryImpl implements PromptQueryRepository {
@@ -32,16 +34,33 @@ public class PromptQueryRepositoryImpl implements PromptQueryRepository {
                 .bind("limit", pageable.getPageSize())
                 .bind("offset", pageable.getOffset());
 
-        return bindParameters(spec, search).mapProperties(Prompt.class).all();
+        // 명시적인 mapRow를 통해 새로 추가된 필드들(model_name, max_tokens 등)을 바인딩합니다.
+        return bindParameters(spec, search)
+                .map((row, metadata) -> Prompt.builder()
+                        .id(row.get("id", Long.class))
+                        .promptName(row.get("prompt_name", String.class))
+                        .version(row.get("version", String.class))
+                        .modelName(row.get("model_name", String.class))
+                        .description(row.get("description", String.class))
+                        .maxTokens(row.get("max_tokens", Integer.class))
+                        .temperature(row.get("temperature", Double.class))
+                        .systemPrompt(row.get("system_prompt", String.class))
+                        .content(row.get("content", String.class))
+                        .isActive(Boolean.TRUE.equals(row.get("is_active", Boolean.class)))
+                        .createdAt(row.get("created_at", LocalDateTime.class))
+                        .modifiedAt(row.get("modified_at", LocalDateTime.class))
+                        .deletedAt(row.get("deleted_at", LocalDateTime.class))
+                        .build()
+                ).all();
     }
 
     @Override
     public Mono<Long> count(PromptSearch search) {
-       StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM prompts WHERE deleted_at IS NULL");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM prompts WHERE deleted_at IS NULL");
 
-       applyConditions(sql, search);
+        applyConditions(sql, search);
 
-       DatabaseClient.GenericExecuteSpec spec = client.sql(sql.toString());
+        DatabaseClient.GenericExecuteSpec spec = client.sql(sql.toString());
         return bindParameters(spec, search)
                 .map((row, metadata) -> row.get(0, Long.class))
                 .one()
@@ -72,5 +91,4 @@ public class PromptQueryRepositoryImpl implements PromptQueryRepository {
 
         return spec;
     }
-
 }

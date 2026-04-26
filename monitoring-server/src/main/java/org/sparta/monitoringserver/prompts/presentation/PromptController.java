@@ -1,6 +1,5 @@
 package org.sparta.monitoringserver.prompts.presentation;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sparta.monitoringserver.prompts.application.PromptService;
@@ -22,36 +21,52 @@ import java.util.stream.Collectors;
 public class PromptController {
     private final PromptService promptService;
 
+    /**
+     * 프롬프트 목록 조회
+     */
     @GetMapping
     public Mono<String> list(PromptSearch search, @PageableDefault(size = 10) Pageable pageable, Model model) {
         return promptService.getAllPrompts(search, pageable)
-                .doOnNext(page -> {
+                .flatMap(page -> {
                     model.addAttribute("prompts", page.getContent());
                     model.addAttribute("page", page);
                     model.addAttribute("search", search);
-                })
-                .thenReturn("prompts/list");
+                    return Mono.just("prompts/list");
+                });
     }
 
+    /**
+     * 프롬프트 등록 폼 (복사 등록 지원)
+     */
     @GetMapping("/register")
     public Mono<String> registerForm(@RequestParam(value = "name", required = false) String name, Model model) {
-
         return promptService.getLatestPromptForTemplate(name)
-                .doOnNext(latest -> {
+                .flatMap(latest -> {
                     model.addAttribute("template", latest);
                     model.addAttribute("isCopy", true);
+                    return Mono.just("prompts/register");
                 })
-                .thenReturn("prompts/register");
+                // 데이터가 없는 순수 신규 등록일 경우를 위한 처리
+                .switchIfEmpty(Mono.just("prompts/register"));
     }
 
+    /**
+     * 프롬프트 등록 실행 (확장된 파라미터 반영)
+     */
     @PostMapping
     public Mono<String> register(@Valid Mono<PromptRequest> requestMono, Model model) {
         return requestMono
                 .flatMap(request -> promptService.registerPrompt(
-                        request.name(), request.version(), request.systemPrompt(), request.content()
+                        request.name(),
+                        request.version(),
+                        request.modelName(),      // 추가
+                        request.description(),    // 추가
+                        request.maxTokens(),      // 추가
+                        request.temperature(),    // 추가
+                        request.systemPrompt(),
+                        request.content()
                 ))
                 .thenReturn("redirect:/prompts")
-                // 검증 오류 발생 시 처리
                 .onErrorResume(WebExchangeBindException.class, ex -> {
                     var errorMap = ex.getBindingResult().getFieldErrors().stream()
                             .collect(Collectors.toMap(
@@ -61,9 +76,14 @@ public class PromptController {
                             ));
 
                     model.addAttribute("errors", errorMap);
-                    return ex.getBindingResult().getTarget() != null
-                            ? Mono.just("prompts/register").doOnNext(v -> model.addAttribute("template", ex.getBindingResult().getTarget()))
-                            : Mono.just("prompts/register");
+
+                    // 검증 실패 시 입력했던 데이터를 다시 폼에 채워줌
+                    Object target = ex.getBindingResult().getTarget();
+                    if (target != null) {
+                        model.addAttribute("template", target);
+                    }
+
+                    return Mono.just("prompts/register");
                 });
     }
 

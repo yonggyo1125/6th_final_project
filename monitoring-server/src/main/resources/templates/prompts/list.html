@@ -12,15 +12,14 @@
         <div class="card-body">
             <form th:action="@{/prompts}" method="get" class="row g-3">
                 <div class="col-md-5">
-                    <label class="form-label d-none">프롬프트명</label>
-                    <input type="text" name="promptName" th:value="${search.promptName}"
+                    <input type="text" name="promptName" th:value="${search?.promptName}"
                            class="form-control" placeholder="프롬프트 명칭으로 검색...">
                 </div>
                 <div class="col-md-3">
                     <select name="isActive" class="form-select">
                         <option value="">전체 상태</option>
-                        <option value="true" th:selected="${search.isActive == true}">활성 (Active)</option>
-                        <option value="false" th:selected="${search.isActive == false}">비활성 (Inactive)</option>
+                        <option value="true" th:selected="${search?.isActive == true}">활성 (Active)</option>
+                        <option value="false" th:selected="${search?.isActive == false}">비활성 (Inactive)</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -40,33 +39,36 @@
                 <th>프롬프트 명칭</th>
                 <th style="width: 120px;">버전</th>
                 <th style="width: 100px;">상태</th>
-                <th style="width: 180px;">등록 일시</th>
+                <th style="width: 200px;">등록 일시</th>
                 <th class="text-center" style="width: 200px;">관리</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="prompt : ${prompts}">
-                <td th:text="${prompt.id}" class="text-muted">1</td>
-                <td th:text="${prompt.promptName}" class="fw-bold">로그 분석기</td>
-                <td><span class="badge bg-info text-dark" th:text="${prompt.version}">1.0.0</span></td>
+                <td th:text="${prompt.id}" class="text-muted text-center">1</td>
+                <td th:text="${prompt.promptName}" class="fw-bold">이름 없음</td>
+                <td><span class="badge bg-info text-dark" th:text="${prompt.version}">0.0.0</span></td>
                 <td>
                     <span th:if="${prompt.isActive}" class="badge rounded-pill bg-success">활성</span>
                     <span th:unless="${prompt.isActive}" class="badge rounded-pill bg-warning text-dark">비활성</span>
                 </td>
-                <td th:text="${#temporals.format(prompt.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${prompt.createdAt != null ? #temporals.format(prompt.createdAt, 'yyyy.MM.dd HH:mm') : '-'}"></td>
                 <td class="text-center">
                     <div class="btn-group btn-group-sm">
+                        <a th:href="@{/prompts/register(name=${prompt.promptName})}" class="btn btn-outline-primary">복사</a>
+
                         <form th:if="${!prompt.isActive}" th:action="@{/prompts/{id}/activate(id=${prompt.id})}" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-outline-success">활성화</button>
                         </form>
+
                         <form th:action="@{/prompts/{id}/delete(id=${prompt.id})}" method="post"
-                              onsubmit="return confirm('해당 프롬프트를 정말 삭제하시겠습니까?\n(삭제된 데이터는 복구되지 않습니다)');" style="display:inline;">
+                              onsubmit="return confirm('해당 프롬프트를 삭제하시겠습니까?');" style="display:inline;">
                             <button type="submit" class="btn btn-outline-danger">삭제</button>
                         </form>
                     </div>
                 </td>
             </tr>
-            <tr th:if="${prompts.empty}">
+            <tr th:if="${prompts == null or #lists.isEmpty(prompts)}">
                 <td colspan="6" class="text-center py-5 text-muted">
                     등록된 프롬프트가 없습니다.
                 </td>
@@ -75,7 +77,7 @@
         </table>
     </div>
 
-    <nav th:if="${page.totalPages > 1}" class="mt-4">
+    <nav th:if="${page != null and page.totalPages > 1}" class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!page.hasPrevious} ? 'disabled'">
                 <a class="page-link" th:href="@{/prompts(page=${page.number - 1}, promptName=${search.promptName}, isActive=${search.isActive})}">이전</a>

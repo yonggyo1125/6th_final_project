@@ -4,9 +4,10 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-dark text-white p-3">
                     <h4 class="mb-0">
-                        <span th:if="${isCopy}">프롬프트 템플릿 복사 등록</span>
+                        <i class="bi bi-pencil-square"></i>
+                        <span th:if="${isCopy}">프롬프트 템플릿 복사 등록 (새 버전)</span>
                         <span th:unless="${isCopy}">신규 프롬프트 템플릿 등록</span>
                     </h4>
                 </div>
@@ -14,27 +15,66 @@
                     <form th:action="@{/prompts}" method="post">
 
                         <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label class="form-label fw-bold">프롬프트 식별자 (Name)</label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">프롬프트 명칭 (Name)</label>
                                 <input type="text" name="name"
                                        th:value="${template != null ? (template instanceof T(org.sparta.monitoringserver.prompts.domain.Prompt) ? template.promptName : template.name) : ''}"
                                        th:classappend="${errors?.containsKey('name')} ? 'is-invalid' : ''"
-                                       class="form-control" placeholder="예: server-error-analyzer" required>
+                                       class="form-control" placeholder="예: error-analyzer" required>
                                 <div class="invalid-feedback" th:if="${errors?.containsKey('name')}" th:text="${errors.get('name')}"></div>
-                                <div class="form-text">에이전트가 호출할 때 사용하는 고유 식별자입니다.</div>
+                                <div class="form-text">에이전트 식별용 고유 이름입니다.</div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">버전 (Version)</label>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold text-danger">버전 (Version)</label>
                                 <input type="text" name="version"
                                        th:value="${template != null ? template.version : ''}"
                                        th:classappend="${errors?.containsKey('version')} ? 'is-invalid' : ''"
-                                       class="form-control" placeholder="예: 1.0.0" required>
+                                       class="form-control" placeholder="1.0.0" required>
                                 <div class="invalid-feedback" th:if="${errors?.containsKey('version')}" th:text="${errors.get('version')}"></div>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">타겟 모델 (Model)</label>
+                                <select name="modelName" class="form-select">
+                                    <option value="gpt-4o" th:selected="${template?.modelName == 'gpt-4o'}">GPT-4o</option>
+                                    <option value="gpt-4-turbo" th:selected="${template?.modelName == 'gpt-4-turbo'}">GPT-4 Turbo</option>
+                                    <option value="claude-3-5-sonnet" th:selected="${template?.modelName == 'claude-3-5-sonnet'}">Claude 3.5 Sonnet</option>
+                                </select>
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">변경 내용 설명 (Description)</label>
+                            <input type="text" name="description"
+                                   th:value="${template?.description}"
+                                   class="form-control" placeholder="이번 버전의 수정 사항을 간단히 적어주세요.">
+                        </div>
+
                         <hr class="my-4">
+
+                        <div class="row mb-4 bg-light p-3 rounded mx-0">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Temperature (창의성)</label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <input type="range" class="form-range" min="0" max="2" step="0.1"
+                                           id="tempRange" oninput="tempOutput.value = this.value"
+                                           th:value="${template?.temperature != null ? template.temperature : 0.7}">
+                                    <input type="number" name="temperature" id="tempOutput"
+                                           class="form-control text-center" style="width: 80px;"
+                                           step="0.1" min="0" max="2" oninput="tempRange.value = this.value"
+                                           th:value="${template?.temperature != null ? template.temperature : 0.7}">
+                                </div>
+                                <div class="form-text">0은 정확도 중심, 1 이상은 창의적 응답을 생성합니다.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Max Tokens (최대 토큰)</label>
+                                <input type="number" name="maxTokens"
+                                       th:value="${template?.maxTokens != null ? template.maxTokens : 2000}"
+                                       class="form-control" min="1" max="128000">
+                                <div class="form-text">응답 한 번에 사용할 최대 토큰 수입니다.</div>
+                            </div>
+                        </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold text-primary">
@@ -42,29 +82,27 @@
                             </label>
                             <textarea name="systemPrompt"
                                       th:classappend="${errors?.containsKey('systemPrompt')} ? 'is-invalid' : ''"
-                                      class="form-control bg-light" rows="4"
-                                      placeholder="AI의 역할과 페르소나를 정의하세요." required
+                                      class="form-control" rows="4"
+                                      placeholder="AI에게 부여할 페르소나와 지침을 입력하세요." required
                                       th:text="${template != null ? template.systemPrompt : ''}"></textarea>
                             <div class="invalid-feedback" th:if="${errors?.containsKey('systemPrompt')}" th:text="${errors.get('systemPrompt')}"></div>
-                            <div class="form-text">LLM의 행동 지침 및 페르소나 설정으로 사용됩니다.</div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold text-success">
-                                <i class="bi bi-chat-left-text"></i> 사용자 콘텐츠 템플릿 (User Content)
+                                <i class="bi bi-chat-left-text"></i> 프롬프트 본문 (Content)
                             </label>
                             <textarea name="content"
                                       th:classappend="${errors?.containsKey('content')} ? 'is-invalid' : ''"
                                       class="form-control" rows="8"
-                                      placeholder="데이터 주입 템플릿을 작성하세요." required
+                                      placeholder="실제 데이터가 치환될 템플릿 영역입니다." required
                                       th:text="${template != null ? template.content : ''}"></textarea>
                             <div class="invalid-feedback" th:if="${errors?.containsKey('content')}" th:text="${errors.get('content')}"></div>
-                            <div class="form-text">실제 데이터가 결합되는 본문 템플릿입니다.</div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end pt-3 border-top">
                             <a href="/prompts" class="btn btn-outline-secondary me-md-2">취소</a>
-                            <button type="submit" class="btn btn-primary px-5">프롬프트 저장</button>
+                            <button type="submit" class="btn btn-primary px-5">프롬프트 저장 및 배포 준비</button>
                         </div>
                     </form>
                 </div>

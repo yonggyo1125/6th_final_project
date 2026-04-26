@@ -14,12 +14,12 @@ public interface R2dbcPromptRepository extends PromptRepository, ReactiveCrudRep
 
     @Override
     @Query("""
-        SELECT * FROM prompts
-        WHERE prompt_name = :promptName
-            AND is_active = true
-            AND deleted_at IS NULL
-        ORDER BY string_to_array(version, '.')::int[] DESC
-        LIMIT 1        
+    SELECT * FROM prompts 
+    WHERE prompt_name = :name 
+      AND is_active = true 
+      AND deleted_at IS NULL 
+    ORDER BY CAST(string_to_array(version, '.') AS INTEGER[]) DESC 
+    LIMIT 1
     """)
     Mono<Prompt> findActiveLatest(@Param("promptName") String promptName);
 
