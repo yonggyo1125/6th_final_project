@@ -69,18 +69,18 @@ public class AgentTools {
             // Block Kit 구조 생성
             List<Object> blocks = new ArrayList<>();
 
-            // 1. Header
+            // Header
             String emoji = "critical".equalsIgnoreCase(severity) ? "🚨" : "⚠️";
             blocks.add(createHeader(String.format("%s [%s] %s 서비스 이상 감지", emoji, severity.toUpperCase(), service)));
 
-            // 2. Summary Section
+            // Summary Section
             blocks.add(createSection(String.format("*분석 결과:*\n%s", analysis)));
             blocks.add(createSection(String.format("*추천 조치:*\n%s", recommendedAction)));
 
-            // 3. Divider
+            // Divider
             blocks.add(Map.of("type", "divider"));
 
-            // 4. Action Buttons
+            // Action Buttons
             blocks.add(createActionButtons(service));
 
             // JSON 직렬화
