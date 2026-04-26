@@ -1,4 +1,4 @@
-package org.sparta.monitoringserver.prompts.domain.exception;
+package org.sparta.monitoringserver.prompt.domain.exception;
 
 public class PromptNotFoundException extends NotFoundException {
     public PromptNotFoundException(String name) {

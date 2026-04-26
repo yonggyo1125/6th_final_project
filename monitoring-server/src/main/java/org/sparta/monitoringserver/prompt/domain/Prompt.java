@@ -1,7 +1,7 @@
-package org.sparta.monitoringserver.prompts.domain;
+package org.sparta.monitoringserver.prompt.domain;
 
 import lombok.*;
-import org.sparta.monitoringserver.prompts.domain.exception.BadRequestException;
+import org.sparta.monitoringserver.prompt.domain.exception.BadRequestException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;

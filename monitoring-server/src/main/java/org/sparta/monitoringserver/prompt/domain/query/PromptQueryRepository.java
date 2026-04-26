@@ -1,8 +1,7 @@
-package org.sparta.monitoringserver.prompts.domain.query;
+package org.sparta.monitoringserver.prompt.domain.query;
 
-import org.sparta.monitoringserver.prompts.domain.Prompt;
+import org.sparta.monitoringserver.prompt.domain.Prompt;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.r2dbc.repository.Query;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

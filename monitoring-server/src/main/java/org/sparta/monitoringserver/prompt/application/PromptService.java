@@ -1,13 +1,13 @@
-package org.sparta.monitoringserver.prompts.application;
+package org.sparta.monitoringserver.prompt.application;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.monitoringserver.prompts.domain.Prompt;
-import org.sparta.monitoringserver.prompts.domain.PromptRepository;
-import org.sparta.monitoringserver.prompts.domain.exception.BadRequestException;
-import org.sparta.monitoringserver.prompts.domain.exception.PromptNotFoundException;
-import org.sparta.monitoringserver.prompts.domain.query.PromptQueryRepository;
-import org.sparta.monitoringserver.prompts.domain.query.PromptSearch;
-import org.sparta.monitoringserver.prompts.domain.service.PromptValidator;
+import org.sparta.monitoringserver.prompt.domain.Prompt;
+import org.sparta.monitoringserver.prompt.domain.PromptRepository;
+import org.sparta.monitoringserver.prompt.domain.exception.BadRequestException;
+import org.sparta.monitoringserver.prompt.domain.exception.PromptNotFoundException;
+import org.sparta.monitoringserver.prompt.domain.query.PromptQueryRepository;
+import org.sparta.monitoringserver.prompt.domain.query.PromptSearch;
+import org.sparta.monitoringserver.prompt.domain.service.PromptValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

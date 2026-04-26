@@ -1,7 +1,7 @@
-package org.sparta.monitoringserver.prompts.infrastructure.persistence;
+package org.sparta.monitoringserver.prompt.infrastructure.persistence;
 
-import org.sparta.monitoringserver.prompts.domain.Prompt;
-import org.sparta.monitoringserver.prompts.domain.PromptRepository;
+import org.sparta.monitoringserver.prompt.domain.Prompt;
+import org.sparta.monitoringserver.prompt.domain.PromptRepository;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

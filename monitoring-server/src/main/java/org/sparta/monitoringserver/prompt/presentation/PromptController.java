@@ -1,9 +1,9 @@
-package org.sparta.monitoringserver.prompts.presentation;
+package org.sparta.monitoringserver.prompt.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.sparta.monitoringserver.prompts.application.PromptService;
-import org.sparta.monitoringserver.prompts.domain.query.PromptSearch;
+import org.sparta.monitoringserver.prompt.application.PromptService;
+import org.sparta.monitoringserver.prompt.domain.query.PromptSearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;

@@ -1,7 +1,7 @@
-package org.sparta.monitoringserver.prompts.infrastructure;
+package org.sparta.monitoringserver.prompt.infrastructure;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.monitoringserver.prompts.domain.service.PromptValidator;
+import org.sparta.monitoringserver.prompt.domain.service.PromptValidator;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;

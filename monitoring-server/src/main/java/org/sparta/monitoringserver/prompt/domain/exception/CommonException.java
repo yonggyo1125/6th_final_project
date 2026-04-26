@@ -1,4 +1,4 @@
-package org.sparta.monitoringserver.prompts.domain.exception;
+package org.sparta.monitoringserver.prompt.domain.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

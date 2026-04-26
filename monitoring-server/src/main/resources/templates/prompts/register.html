@@ -18,7 +18,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">프롬프트 명칭 (Name)</label>
                                 <input type="text" name="name"
-                                       th:value="${template != null ? (template instanceof T(org.sparta.monitoringserver.prompts.domain.Prompt) ? template.promptName : template.name) : ''}"
+                                       th:value="${template != null ? (template instanceof T(org.sparta.monitoringserver.prompt.domain.Prompt) ? template.promptName : template.name) : ''}"
                                        th:classappend="${errors?.containsKey('name')} ? 'is-invalid' : ''"
                                        class="form-control" placeholder="예: error-analyzer" required>
                                 <div class="invalid-feedback" th:if="${errors?.containsKey('name')}" th:text="${errors.get('name')}"></div>

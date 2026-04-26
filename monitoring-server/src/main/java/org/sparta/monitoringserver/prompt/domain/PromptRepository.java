@@ -1,4 +1,4 @@
-package org.sparta.monitoringserver.prompts.domain;
+package org.sparta.monitoringserver.prompt.domain;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

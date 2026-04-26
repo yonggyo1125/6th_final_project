@@ -1,4 +1,4 @@
-package org.sparta.monitoringserver.prompts.presentation;
+package org.sparta.monitoringserver.prompt.presentation;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

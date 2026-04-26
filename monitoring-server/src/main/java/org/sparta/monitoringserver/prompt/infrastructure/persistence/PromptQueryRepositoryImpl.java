@@ -1,9 +1,9 @@
-package org.sparta.monitoringserver.prompts.infrastructure.persistence;
+package org.sparta.monitoringserver.prompt.infrastructure.persistence;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.monitoringserver.prompts.domain.Prompt;
-import org.sparta.monitoringserver.prompts.domain.query.PromptQueryRepository;
-import org.sparta.monitoringserver.prompts.domain.query.PromptSearch;
+import org.sparta.monitoringserver.prompt.domain.Prompt;
+import org.sparta.monitoringserver.prompt.domain.query.PromptQueryRepository;
+import org.sparta.monitoringserver.prompt.domain.query.PromptSearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
