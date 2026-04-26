@@ -5,7 +5,12 @@ import org.sparta.monitoringserver.prompts.domain.Prompt;
 import org.sparta.monitoringserver.prompts.domain.PromptRepository;
 import org.sparta.monitoringserver.prompts.domain.exception.BadRequestException;
 import org.sparta.monitoringserver.prompts.domain.exception.PromptNotFoundException;
+import org.sparta.monitoringserver.prompts.domain.query.PromptQueryRepository;
+import org.sparta.monitoringserver.prompts.domain.query.PromptSearch;
 import org.sparta.monitoringserver.prompts.domain.service.PromptValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -14,6 +19,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class PromptService {
     private final PromptRepository promptRepository;
+    private final PromptQueryRepository promptQueryRepository;
     private final PromptValidator promptValidator;
 
     @Transactional
@@ -33,7 +39,7 @@ public class PromptService {
     }
 
     @Transactional
-    public Mono<Void> activePrompt(Long id) {
+    public Mono<Void> activatePrompt(Long id) {
         return promptRepository.findById(id)
                 .switchIfEmpty(Mono.error(new PromptNotFoundException(id)))
                 .map(prompt -> {
@@ -60,5 +66,13 @@ public class PromptService {
                 })
                 .flatMap(promptRepository::save)
                 .then();
+    }
+
+    @Transactional(readOnly = true)
+    public Mono<Page<Prompt>> getAllPrompts(PromptSearch search, Pageable pageable) {
+        return Mono.zip(
+                promptQueryRepository.findAll(search, pageable).collectList(),
+                promptQueryRepository.count(search)
+        ).map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()));
     }
 }
