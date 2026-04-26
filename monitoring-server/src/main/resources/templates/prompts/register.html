@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::section})}">
+<section>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        <span th:if="${isCopy}">프롬프트 템플릿 복사 등록</span>
+                        <span th:unless="${isCopy}">신규 프롬프트 템플릿 등록</span>
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/prompts}" method="post">
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">프롬프트 식별자 (Name)</label>
+                                <input type="text" name="name"
+                                       th:value="${template != null ? (template instanceof T(org.sparta.monitoringserver.prompts.domain.Prompt) ? template.promptName : template.name) : ''}"
+                                       th:classappend="${errors?.containsKey('name')} ? 'is-invalid' : ''"
+                                       class="form-control" placeholder="예: server-error-analyzer" required>
+                                <div class="invalid-feedback" th:if="${errors?.containsKey('name')}" th:text="${errors.get('name')}"></div>
+                                <div class="form-text">에이전트가 호출할 때 사용하는 고유 식별자입니다.</div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">버전 (Version)</label>
+                                <input type="text" name="version"
+                                       th:value="${template != null ? template.version : ''}"
+                                       th:classappend="${errors?.containsKey('version')} ? 'is-invalid' : ''"
+                                       class="form-control" placeholder="예: 1.0.0" required>
+                                <div class="invalid-feedback" th:if="${errors?.containsKey('version')}" th:text="${errors.get('version')}"></div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-robot"></i> 시스템 프롬프트 (System Prompt)
+                            </label>
+                            <textarea name="systemPrompt"
+                                      th:classappend="${errors?.containsKey('systemPrompt')} ? 'is-invalid' : ''"
+                                      class="form-control bg-light" rows="4"
+                                      placeholder="AI의 역할과 페르소나를 정의하세요." required
+                                      th:text="${template != null ? template.systemPrompt : ''}"></textarea>
+                            <div class="invalid-feedback" th:if="${errors?.containsKey('systemPrompt')}" th:text="${errors.get('systemPrompt')}"></div>
+                            <div class="form-text">LLM의 행동 지침 및 페르소나 설정으로 사용됩니다.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-success">
+                                <i class="bi bi-chat-left-text"></i> 사용자 콘텐츠 템플릿 (User Content)
+                            </label>
+                            <textarea name="content"
+                                      th:classappend="${errors?.containsKey('content')} ? 'is-invalid' : ''"
+                                      class="form-control" rows="8"
+                                      placeholder="데이터 주입 템플릿을 작성하세요." required
+                                      th:text="${template != null ? template.content : ''}"></textarea>
+                            <div class="invalid-feedback" th:if="${errors?.containsKey('content')}" th:text="${errors.get('content')}"></div>
+                            <div class="form-text">실제 데이터가 결합되는 본문 템플릿입니다.</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end pt-3 border-top">
+                            <a href="/prompts" class="btn btn-outline-secondary me-md-2">취소</a>
+                            <button type="submit" class="btn btn-primary px-5">프롬프트 저장</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

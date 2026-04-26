@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -23,7 +24,7 @@ public class PromptService {
     private final PromptValidator promptValidator;
 
     @Transactional
-    public Mono<Long> registerPrompt(String name, String version, String content) {
+    public Mono<Long> registerPrompt(String name, String version, String systemPrompt, String content) {
         // 프롬프르 중복 검증
         return promptValidator.isDuplicatedVersion(name, version)
                 .flatMap(isDuplicated -> {
@@ -32,7 +33,7 @@ public class PromptService {
                     }
 
                     // 프롬프트 저장 처리
-                    Prompt prompt = Prompt.create(name, version, content);
+                    Prompt prompt = Prompt.create(name, version, systemPrompt, content);
                     return promptRepository.save(prompt)
                             .map(Prompt::getId);
                 });
@@ -74,5 +75,13 @@ public class PromptService {
                 promptQueryRepository.findAll(search, pageable).collectList(),
                 promptQueryRepository.count(search)
         ).map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()));
+    }
+
+    @Transactional(readOnly = true)
+    public Mono<Prompt> getLatestPromptForTemplate(String name) {
+        if (!StringUtils.hasText(name)) {
+            return Mono.empty();
+        }
+        return promptRepository.findActiveLatest(name);
     }
 }

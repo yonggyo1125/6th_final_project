@@ -17,6 +17,7 @@ spring:
 
 logging:
   level:
+    org.springframework.r2dbc: DEBUG
     org.springframework.ai.tool: DEBUG
     org.springframework.ai.chat.client.advisor: DEBUG
 

@@ -22,4 +22,6 @@ public interface R2dbcPromptRepository extends PromptRepository, ReactiveCrudRep
         LIMIT 1        
     """)
     Mono<Prompt> findActiveLatest(@Param("promptName") String promptName);
+
+
 }
