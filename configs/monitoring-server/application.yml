@@ -11,6 +11,16 @@ spring:
       max-size: 20
       max-idle-time: 30m
 
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+logging:
+  level:
+    org.springframework.ai.tool: DEBUG
+    org.springframework.ai.chat.client.advisor: DEBUG
+
+
 monitoring:
   prometheus: 
     url: ${PROMETHEUS_URL:http://localhost:4101}

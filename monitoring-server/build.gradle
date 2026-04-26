@@ -33,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
-    implementation 'io.r2dbc:r2dbc-pool'
 
     implementation 'com.slack.api:slack-api-client:1.48.1'
 
