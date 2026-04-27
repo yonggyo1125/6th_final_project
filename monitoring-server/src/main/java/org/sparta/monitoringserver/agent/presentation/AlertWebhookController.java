@@ -25,7 +25,7 @@ public class AlertWebhookController {
     @PostMapping
     public Mono<ResponseEntity<String>> handleWebhook(@RequestBody AlertManagerPayload payload) {
         log.info("Alertmanager Webhook 수신: 상태={}", payload.status());
-
+        
         // 'firing' 상태의 알람만 에이전트 분석 가동
         if (!"firing".equalsIgnoreCase(payload.status())) {
             return Mono.just(ResponseEntity.ok("Resolved는 분석하지 않음"));
