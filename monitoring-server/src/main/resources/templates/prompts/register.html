@@ -37,9 +37,11 @@
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">타겟 모델 (Model)</label>
                                 <select name="modelName" class="form-select">
-                                    <option value="gpt-4o" th:selected="${template?.modelName == 'gpt-4o'}">GPT-4o</option>
-                                    <option value="gpt-4-turbo" th:selected="${template?.modelName == 'gpt-4-turbo'}">GPT-4 Turbo</option>
-                                    <option value="claude-3-5-sonnet" th:selected="${template?.modelName == 'claude-3-5-sonnet'}">Claude 3.5 Sonnet</option>
+                                    <option th:each="model : ${ {'gpt-4o', 'gpt-4-turbo', 'gpt-5'} }"
+                                            th:value="${model}"
+                                            th:text="${model}"
+                                            th:selected="${template?.modelName == model}">
+                                    </option>
                                 </select>
                             </div>
                         </div>

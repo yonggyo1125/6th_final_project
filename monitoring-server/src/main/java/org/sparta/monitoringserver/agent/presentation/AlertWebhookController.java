@@ -30,6 +30,7 @@ public class AlertWebhookController {
         if (!"firing".equalsIgnoreCase(payload.status())) {
             return Mono.just(ResponseEntity.ok("Resolved는 분석하지 않음"));
         }
+        log.info("checkpoint1: {}", payload);
 
         return Flux.fromIterable(payload.alerts())
                 .flatMap(alert -> {
@@ -51,7 +52,8 @@ public class AlertWebhookController {
         Map<String, Object> inputs = new HashMap<>();
 
         inputs.put("alertName", alert.labels().getOrDefault("alertname", "UnknownAlert"));
-        inputs.put("appName", alert.labels().getOrDefault("app", "unknown-service"));
+        inputs.put("appName", alert.labels().getOrDefault("instance", "unknown-service"));
+        inputs.put("app", alert.labels().getOrDefault("instance", "unknown-service"));
         inputs.put("severity", alert.labels().getOrDefault("severity", "warning"));
         inputs.put("summary", alert.annotations().getOrDefault("summary", "N/A"));
         inputs.put("description", alert.annotations().getOrDefault("description", "N/A"));

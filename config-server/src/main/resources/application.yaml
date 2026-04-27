@@ -33,10 +33,27 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh,health,info,metrics
+        include: refresh,health,info,metrics,prometheus
+
+  endpoint:
+    health:
+      show-details: always # 상세한 서킷 상태 모니터링
+
+    prometheus:
+      enabled: true
+    metrics:
+      enabled: true
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
   tracing:
     sampling:
-      probability: 0.1
+      probability: 1
     zipkin:
       tracing:
         endpoint: "${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}"
