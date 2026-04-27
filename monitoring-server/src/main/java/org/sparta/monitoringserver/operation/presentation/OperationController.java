@@ -26,6 +26,10 @@ public class OperationController {
                     String responseUrl = payload.path("response_url").asText();
 
                     log.info("슬랙 액션 수신: actionId={}, service={}", actionId, serviceName);
+
+                    // 액션에 따른 조치 처리
+
+
                     return Mono.empty();
                 });
     }
