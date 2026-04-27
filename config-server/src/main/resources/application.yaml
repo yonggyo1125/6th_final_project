@@ -37,7 +37,7 @@ management:
 
   endpoint:
     health:
-      show-details: always # 상세한 서킷 상태 모니터링
+      show-details: always
 
     prometheus:
       enabled: true
