@@ -27,7 +27,9 @@ logging:
 monitoring:
   prometheus: 
     url: ${PROMETHEUS_URL:http://localhost:4101}
+
   loki:
     url: ${LOKI_URL:http://localhost:4102}
+
   slack:
     url: ${SLACK_WEBHOOK_URL}
