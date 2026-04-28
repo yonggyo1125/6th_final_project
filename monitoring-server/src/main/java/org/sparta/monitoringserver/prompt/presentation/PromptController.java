@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 public class PromptController {
     private final PromptService promptService;
 
-    /**
-     * 프롬프트 목록 조회
-     */
+
     @GetMapping
     public Mono<String> list(PromptSearch search, @PageableDefault(size = 10) Pageable pageable, Model model) {
         return promptService.getAllPrompts(search, pageable)
@@ -35,9 +33,7 @@ public class PromptController {
                 });
     }
 
-    /**
-     * 프롬프트 등록 폼 (복사 등록 지원)
-     */
+
     @GetMapping("/register")
     public Mono<String> registerForm(@RequestParam(value = "name", required = false) String name, Model model) {
         return promptService.getLatestPromptForTemplate(name)
@@ -59,10 +55,10 @@ public class PromptController {
                 .flatMap(request -> promptService.registerPrompt(
                         request.name(),
                         request.version(),
-                        request.modelName(),      // 추가
-                        request.description(),    // 추가
-                        request.maxTokens(),      // 추가
-                        request.temperature(),    // 추가
+                        request.modelName(),
+                        request.description(),
+                        request.maxTokens(),
+                        request.temperature(),
                         request.systemPrompt(),
                         request.content()
                 ))

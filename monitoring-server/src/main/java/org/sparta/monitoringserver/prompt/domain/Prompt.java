@@ -100,7 +100,7 @@ public class Prompt {
         this.modelName = StringUtils.hasText(modelName) ? modelName : "gpt-4o"; // 기본값 설정
         this.description = description;
         this.maxTokens = maxTokens != null ? maxTokens : 2000;
-        this.temperature = temperature != null ? temperature : 0.7;
+        this.temperature = temperature != null ? temperature : 0.0;
         this.systemPrompt = systemPrompt;
         this.content = content;
     }
