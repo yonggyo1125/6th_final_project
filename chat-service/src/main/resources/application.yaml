@@ -4,14 +4,18 @@ spring:
   config:
     import: 'optional:configserver: '
   cloud:
-    discovery:
-      enabled: true
-      service-id: config-server
-
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
 
 eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: ${HOSTNAME:localhost}
+
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13101/eureka/}
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:13101/eureka/}
