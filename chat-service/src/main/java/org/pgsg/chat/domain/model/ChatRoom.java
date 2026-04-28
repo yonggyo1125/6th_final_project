@@ -1,10 +1,7 @@
 package org.pgsg.chat.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.pgsg.chat.domain.event.ChatEvents;
 
 import java.time.LocalDateTime;
@@ -14,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "p_chat_room")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom {

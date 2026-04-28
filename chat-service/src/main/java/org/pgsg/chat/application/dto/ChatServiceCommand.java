@@ -1,15 +1,15 @@
 package org.pgsg.chat.application.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatServiceCommand {
 
+    @Getter
     @Builder
+    @ToString
     public static class CreateRoom {
         private UUID tradeId;
         private UUID productId;

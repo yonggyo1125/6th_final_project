@@ -2,11 +2,10 @@ package org.pgsg.chat.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.pgsg.chat.application.dto.ChatServiceCommand;
+import org.pgsg.chat.domain.model.ChatRoom;
 import org.pgsg.chat.domain.repository.ChatRoomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -14,9 +13,19 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
 
     @Transactional
-    public UUID createRoom(ChatServiceCommand.CreateRoom createRoomDto) {
+    public void createRoom(ChatServiceCommand.CreateRoom dto) {
 
-        return null;
+        ChatRoom chatRoom = ChatRoom.builder()
+                .tradeId(dto.getTradeId())
+                .sellerId(dto.getSellerId())
+                .sellerNickName(dto.getSellerNickName())
+                .buyerId(dto.getBuyerId())
+                .buyerNickName(dto.getBuyerNickName())
+                .productId(dto.getProductId())
+                .productName(dto.getProductName())
+                .build();
+
+        chatRoomRepository.save(chatRoom);
     }
 
     // 채팅 방하나 조회
