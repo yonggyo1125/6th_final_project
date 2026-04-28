@@ -1,6 +1,6 @@
 package com.goggles.user_service.user.domain.model2;
 
-import com.goggles.user_service.user.domain.exception.InvalidUserIdException;
+import com.goggles.user_service.exception.InvalidUserIdException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

@@ -1,6 +1,6 @@
 package com.goggles.user_service.user.domain.model2;
 
-import com.goggles.user_service.user.domain.exception.InvalidPasswordException;
+import com.goggles.user_service.exception.InvalidPasswordException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

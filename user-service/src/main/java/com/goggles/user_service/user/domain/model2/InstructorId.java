@@ -1,6 +1,6 @@
 package com.goggles.user_service.user.domain.model2;
 
-import com.goggles.user_service.user.domain.exception.InvalidInstructorIdException;
+import com.goggles.user_service.exception.InvalidInstructorIdException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

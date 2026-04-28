@@ -1,6 +1,6 @@
 package com.goggles.user_service.user.domain.model2;
 
-import com.goggles.user_service.user.domain.exception.InvalidBankAccountException;
+import com.goggles.user_service.exception.InvalidBankAccountException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

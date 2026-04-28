@@ -1,4 +1,4 @@
-package com.goggles.user_service.user.domain.exception;
+package com.goggles.user_service.exception;
 
 import com.goggles.common.exception.NotFoundException;
 
