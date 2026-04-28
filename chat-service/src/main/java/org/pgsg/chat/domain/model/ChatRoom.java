@@ -38,12 +38,16 @@ public class ChatRoom {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatMessage> messages = new ArrayList<>();
 
+
+    /**
+     * trade_id, product_id, product_name, product_price, seller_id, seller_nickname, buyer_id, buyer_nickname
+     */
     @Builder
-    protected ChatRoom(UUID tradeId,UUID productId, UUID sellerId, UUID buyerId, RoomStatus status, UserProvider userProvider, ProductProvider productProvider) {
+    protected ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName, RoomStatus status) {
         this.id = RoomId.of(tradeId);
-        this.seller = new Seller(sellerId, userProvider);
-        this.buyer = new Buyer(buyerId, userProvider);
-        this.product = new Product(productId, productProvider);
+        this.seller = new Seller(sellerId, sellerNickName);
+        this.buyer = new Buyer(buyerId, buyerNickName);
+        this.product = new Product(productId, productName);
         this.status = status;
     }
 
