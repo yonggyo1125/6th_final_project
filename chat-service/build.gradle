@@ -1,0 +1,79 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.13'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.pgsg'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url = uri("https://maven.pkg.github.com/89-49/common")
+		credentials {
+			username = findProperty('gpr.user') ?: System.getenv('GPR_USER')
+			password = findProperty('gpr.token') ?: System.getenv('GPR_TOKEN')
+		}
+	}
+}
+
+ext {
+	set('springCloudVersion', "2025.0.2")
+}
+
+dependencies {
+
+	// PostgreSQL
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// common 공통 모듈
+	implementation 'org.pgsg:common:0.0.1-SNAPSHOT'
+
+	// STOMP WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	// JPA
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//	// Validation
+//	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//	// REST API
+//	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	// Eureka Client
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+//	// test
+//	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+//	kafka
+//	implementation 'org.springframework.kafka:spring-kafka'
+//	testImplementation 'org.springframework.kafka:spring-kafka-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

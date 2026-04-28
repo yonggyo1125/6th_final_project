@@ -1,0 +1,20 @@
+server:
+  port: 19050
+
+spring:
+  application:
+    name: chat-service
+  config:
+    import: 'optional:configserver: '
+  cloud:
+    discovery:
+      enabled: true
+      service-id: config-server
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13101/eureka/}
