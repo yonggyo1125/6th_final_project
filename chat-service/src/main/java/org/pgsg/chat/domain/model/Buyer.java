@@ -6,8 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.pgsg.chat.domain.service.UserData;
-import org.pgsg.chat.domain.service.UserProvider;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -23,21 +22,16 @@ public class Buyer {
     @Column(name = "buyer_nickname", nullable = false)
     private String nickname;
 
-    protected Buyer(UUID id, UserProvider userProvider) {
+    protected Buyer(UUID id, String nickname) {
         if (id == null) {
             throw new IllegalArgumentException("구매자 ID는 필수입니다.");
         }
 
-        if (userProvider == null) {
-            throw new IllegalArgumentException("UserProvider가 주입되지 않았습니다.");
-        }
-
-        UserData data = userProvider.getUser(id);
-        if (data == null || data.id() == null) {
-            throw new IllegalArgumentException("구매자를 찾을수 없습니다.");
+        if (!StringUtils.hasText(nickname)) {
+            throw new IllegalArgumentException("구매자 닉네임은 필수입니다.");
         }
 
         this.id = id;
-        this.nickname = data.nickname();
+        this.nickname = nickname;
     }
 }

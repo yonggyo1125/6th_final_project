@@ -1,10 +1,11 @@
 package org.pgsg.chat.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.pgsg.chat.domain.event.ChatEvents;
-import org.pgsg.chat.domain.service.ProductProvider;
-import org.pgsg.chat.domain.service.UserProvider;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,28 +40,13 @@ public class ChatRoom {
     private List<ChatMessage> messages = new ArrayList<>();
 
 
-    /**
-     * trade_id, product_id, product_name, product_price, seller_id, seller_nickname, buyer_id, buyer_nickname
-     */
     @Builder
-    protected ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName, RoomStatus status) {
+    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName, RoomStatus status) {
         this.id = RoomId.of(tradeId);
         this.seller = new Seller(sellerId, sellerNickName);
         this.buyer = new Buyer(buyerId, buyerNickName);
         this.product = new Product(productId, productName);
         this.status = status;
-    }
-
-    public static ChatRoom create(UUID tradeId, UUID productId, UUID sellerId, UUID buyerId, UserProvider userProvider, ProductProvider productProvider){
-        return ChatRoom.builder()
-                .tradeId(tradeId)
-                .productId(productId)
-                .buyerId(buyerId)
-                .sellerId(sellerId)
-                .userProvider(userProvider)
-                .productProvider(productProvider)
-                .status(RoomStatus.TRADING) // 기본값은 TRADING
-                .build();
     }
 
     // 채팅 메세지 등록

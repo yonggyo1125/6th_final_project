@@ -6,8 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.pgsg.chat.domain.service.ProductData;
-import org.pgsg.chat.domain.service.ProductProvider;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -22,21 +21,17 @@ public class Product {
     @Column(length = 100, name="product_name")
     private String name;
 
-    protected Product(UUID id, ProductProvider productProvider) {
+    protected Product(UUID id, String name) {
         if (id == null) {
             throw new IllegalArgumentException("상품 ID는 필수입니다.");
         }
 
-        if (productProvider == null) {
-            throw new IllegalArgumentException("ProductProvider 주입되지 않았습니다.");
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException("상품명은 필수입니다.");
         }
 
-        ProductData data = productProvider.getProductData(id);
-        if (data == null || data.id() == null) {
-            throw new IllegalArgumentException("상품을 찾을수 없습니다.");
-        }
 
         this.id = id;
-        this.name = data.name();
+        this.name = name;
     }
 }
