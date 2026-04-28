@@ -55,7 +55,7 @@ public class ChatRoom {
 
     // 마지막 메세지 등록 일시
     public LocalDateTime getLastMessageAt() {
-        return this.messages == null || this.messages.size() == 0 ? null : this.messages.getLast().getCreatedAt();
+        return this.messages == null || this.messages.isEmpty() ? null : this.messages.getLast().getCreatedAt();
     }
 
     // 완료 상태 변경
