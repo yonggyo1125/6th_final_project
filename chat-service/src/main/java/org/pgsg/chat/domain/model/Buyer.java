@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.pgsg.chat.domain.exception.BadRequestException;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -24,11 +25,11 @@ public class Buyer {
 
     protected Buyer(UUID id, String nickname) {
         if (id == null) {
-            throw new IllegalArgumentException("구매자 ID는 필수입니다.");
+            throw new BadRequestException("NotBlank.buyerId", "buyerId");
         }
 
         if (!StringUtils.hasText(nickname)) {
-            throw new IllegalArgumentException("구매자 닉네임은 필수입니다.");
+            throw new BadRequestException("NotBlank.buyerNickname", "buyerNickname");
         }
 
         this.id = id;

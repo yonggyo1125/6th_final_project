@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.pgsg.chat.domain.exception.BadRequestException;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -23,11 +24,11 @@ public class Product {
 
     protected Product(UUID id, String name) {
         if (id == null) {
-            throw new IllegalArgumentException("상품 ID는 필수입니다.");
+            throw new BadRequestException("NotBlank.productId", "productId");
         }
 
         if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("상품명은 필수입니다.");
+            throw new BadRequestException("NotBlank.productName", "productName");
         }
 
 
