@@ -1,6 +1,5 @@
-package com.goggles.user_service.domain.entity;
+package com.goggles.user_service.domain.model2;
 
-import com.goggles.user_service.domain.exception.InvalidExperienceException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

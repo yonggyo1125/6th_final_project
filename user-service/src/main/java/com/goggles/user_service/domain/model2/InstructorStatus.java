@@ -1,4 +1,4 @@
-package com.goggles.user_service.domain.entity;
+package com.goggles.user_service.domain.model2;
 
 public enum InstructorStatus {
     REQUESTED,
