@@ -40,12 +40,12 @@ public class ChatRoom {
     private List<ChatMessage> messages = new ArrayList<>();
 
     @Builder
-    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName, RoomStatus status) {
+    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName) {
         this.id = RoomId.of(tradeId);
         this.seller = new Seller(sellerId, sellerNickName);
         this.buyer = new Buyer(buyerId, buyerNickName);
         this.product = new Product(productId, productName);
-        this.status = status;
+        this.status = RoomStatus.TRADING;
     }
 
     // 채팅 메세지 등록
@@ -60,6 +60,10 @@ public class ChatRoom {
 
     // 완료 상태 변경
     public void complete(ChatEvents events) {
+        if (this.status == RoomStatus.COMPLETED) { // 이미 완료 상태이면 처리 X, 멱등성 처리
+            return;
+        }
+
         this.status = RoomStatus.COMPLETED;
 
         // 완료 상태 변경 후 후속 처리 알림
@@ -67,6 +71,10 @@ public class ChatRoom {
     }
 
     public void cancel(ChatEvents events) {
+        if (this.status == RoomStatus.CANCELED) { // 이미 취소 상태이면 처리 X
+            return;
+        }
+
         this.status = RoomStatus.CANCELED;
 
         // 취소 상태 변경 후 후속 처리 알림
