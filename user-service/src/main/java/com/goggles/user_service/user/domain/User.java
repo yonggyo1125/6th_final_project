@@ -1,6 +1,7 @@
 package com.goggles.user_service.user.domain;
 
 import com.goggles.common.domain.BaseTime;
+import com.goggles.user_service.user.domain.service.MessageProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
@@ -57,7 +58,9 @@ public class User extends BaseTime {
                 UUID userId, String name, String nickname, Gender gender, LocalDate birthdate,  // 기본 정보
                 String email, String phoneNumber, // 연락처
                 List<Interest> interests, List<Job> jobs, List<String> educations, List<String> majors,  // 프로필
-                boolean personalConsent, boolean marketingConsent, boolean emailConsent // 약관 동의
+                boolean personalConsent, boolean marketingConsent, boolean emailConsent, // 약관 동의
+                // 도메인 서비스
+                MessageProvider messageProvider
     ) {
 
         this.id = UserId.of(userId);
@@ -65,19 +68,16 @@ public class User extends BaseTime {
         this.nickname = nickname;
         this.role = Role.STUDENT; // 기본값은 Student
         this.gender = gender;
-        this.contact = new Contact(email, phoneNumber);
-        this.profile = new Profile(interests, jobs, educations, majors);
-        this.consent = new Consent(personalConsent, marketingConsent, emailConsent);
+        this.contact = new Contact(email, phoneNumber, messageProvider);
+        this.profile = new Profile(interests, jobs, educations, majors, messageProvider);
+        this.consent = new Consent(personalConsent, marketingConsent, emailConsent, messageProvider);
 
-        setBirthdate(birthdate); // 생년월일
-
-
+        setBirthdate(birthdate, messageProvider); // 생년월일
     }
 
 
-    private void setBirthdate(LocalDate birthdate) {
+    private void setBirthdate(LocalDate birthdate, MessageProvider messageProvider) {
         // 14세 이상만 가입 가능 체크
         this.birthdate = birthdate;
     }
-
 }

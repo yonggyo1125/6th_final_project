@@ -1,5 +1,7 @@
 package com.goggles.user_service.user.domain;
 
+import com.goggles.common.exception.BadRequestException;
+import com.goggles.user_service.user.domain.service.MessageProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -21,8 +23,11 @@ public class Consent {
     @Column(name="email_consent")
     private boolean email; // 이메일 수신 동의
 
-    protected Consent(boolean personal, boolean marketing, boolean email) {
-        //
+    protected Consent(boolean personal, boolean marketing, boolean email, MessageProvider messageProvider) {
+        // 개인정보 수집 필수 체크
+        if (!personal) {
+            throw new BadRequestException(messageProvider.getMessage("user.validation.personal.required"));
+        }
 
         this.personal = personal;
         this.marketing = marketing;

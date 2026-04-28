@@ -1,5 +1,6 @@
 package com.goggles.user_service.user.domain;
 
+import com.goggles.user_service.user.domain.service.MessageProvider;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class Profile {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> majors;
 
-    protected Profile(List<Interest> interests, List<Job> jobs, List<String> educations, List<String> majors) {
+    protected Profile(List<Interest> interests, List<Job> jobs, List<String> educations, List<String> majors, MessageProvider messageProvider) {
         //
 
         this.interests = interests;
