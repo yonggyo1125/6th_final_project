@@ -1,4 +1,4 @@
-package org.sparta.userservice;
+package com.goggles.user_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,9 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class UserServiceApplicationTests {
 
+	@Test
+	void contextLoads() {
+	}
 
-
-    @Test
-    void contextLoads() {
-    }
 }
