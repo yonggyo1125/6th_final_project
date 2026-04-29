@@ -2,6 +2,7 @@ package com.goggles.user_service.user.domain;
 
 import com.goggles.common.domain.BaseTime;
 import com.goggles.common.exception.BadRequestException;
+import com.goggles.common.exception.ForbiddenException;
 import com.goggles.user_service.user.domain.exception.MasterOnlyException;
 import com.goggles.user_service.user.domain.service.MessageProvider;
 import com.goggles.user_service.user.domain.service.RoleCheck;
@@ -123,10 +124,23 @@ public class User extends BaseTime {
         this.role = role;
     }
 
+    // 기본 정보 변경
+    // 로그인 사용자 본인 또는 마스터 관리자만 가능
+    public void changeBasicInfo(String name, String nickname,LocalDate birthdate, RoleCheck roleCheck, MessageProvider messageProvider) {
+
+    }
+
     // MASTER 권한인지 체크
     private void checkMasterOnly(RoleCheck roleCheck, MessageProvider messageProvider) {
         if (!roleCheck.hasRole(Role.MASTER)) {
             throw new MasterOnlyException(messageProvider.getMessage("user.exception.master.forbidden"));
+        }
+    }
+
+    // 로그인한 사용자의 회원 정보인지 체크 (마스터 관리자 또는 본인)
+    private void checkMine(RoleCheck roleCheck, MessageProvider messageProvider) {
+        if (!roleCheck.hasRole(Role.MASTER) && !roleCheck.isMine()) {
+            throw new ForbiddenException(messageProvider.getMessage("user.exception.mine.forbidden"));
         }
     }
 }
