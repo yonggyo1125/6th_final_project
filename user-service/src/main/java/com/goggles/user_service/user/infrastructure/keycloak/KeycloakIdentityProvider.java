@@ -3,9 +3,11 @@ package com.goggles.user_service.user.infrastructure.keycloak;
 import com.goggles.user_service.user.domain.UserId;
 import com.goggles.user_service.user.domain.exception.DuplicatedUserException;
 import com.goggles.user_service.user.domain.exception.IdentityProviderException;
+import com.goggles.user_service.user.domain.exception.UserNotFoundException;
 import com.goggles.user_service.user.domain.service.IdentityProvider;
 import com.goggles.user_service.user.domain.service.MessageProvider;
 import com.goggles.user_service.user.infrastructure.keycloak.config.KeycloakProperties;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,12 +73,28 @@ public class KeycloakIdentityProvider implements IdentityProvider {
 
     @Override
     public void withdraw(UUID id) {
-
+        try {
+            keycloak.realm(properties.realm()).users()
+                    .get(id.toString())
+                    .remove();
+        } catch (Exception e) {
+            log.error("keycloak 회원 삭제 실패 - ID: {}, 사유: {}", id, e.getMessage(), e);
+        }
     }
 
     @Override
     public void changePassword(UserId id, String newPassword) {
-
+        UsersResource usersResource = keycloak.realm(properties.realm()).users();
+        String userId = id.getId().toString();
+        try {
+            usersResource.get(userId).resetPassword(getCredential(newPassword));
+        } catch (NotFoundException e) {
+            log.error("keycloak에서 사용자를 찾을 수 없음 - ID: {}, 사유: {}", userId, e.getMessage(), e);
+            throw new UserNotFoundException(messageProvider.getMessage("user.notfound"));
+        } catch (Exception e) {
+            log.error("keycloak에서 비밀번호 변경 실패 - ID: {}, 사유: {}", userId, e.getMessage(), e);
+            throw new IdentityProviderException(messageProvider.getMessage("user.changepassword.failed"));
+        }
     }
 
     private CredentialRepresentation getCredential(String password) {
