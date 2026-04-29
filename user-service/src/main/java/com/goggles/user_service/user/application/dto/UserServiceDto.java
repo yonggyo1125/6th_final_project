@@ -1,9 +1,6 @@
 package com.goggles.user_service.user.application.dto;
 
-import com.goggles.user_service.user.domain.Gender;
-import com.goggles.user_service.user.domain.Interest;
-import com.goggles.user_service.user.domain.Job;
-import com.goggles.user_service.user.domain.UserId;
+import com.goggles.user_service.user.domain.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -38,6 +35,25 @@ public class UserServiceDto {
 
         public static SignUp from() {
             return null;
+        }
+
+        public static User toUser(UUID userId, UserServiceDto.SignUp data) {
+            return User.builder()
+                    .userId(userId)
+                    .email(data.getEmail())
+                    .gender(data.getGender())
+                    .name(data.getName())
+                    .nickname(data.getNickname())
+                    .birthdate(data.getBirthdate())
+                    .phoneNumber(data.getPhoneNumber())
+                    .interests(data.getInterests())
+                    .jobs(data.getJobs())
+                    .educations(data.getEducations())
+                    .majors(data.getMajors())
+                    .personalConsent(data.isPersonalConsent())
+                    .marketingConsent(data.isMarketingConsent())
+                    .emailConsent(data.isEmailConsent())
+                    .build();
         }
     }
 }

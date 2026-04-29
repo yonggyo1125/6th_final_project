@@ -30,23 +30,8 @@ public class UserService {
         UUID userId = identityProvider.register(data.getEmail(), data.getPassword());
 
         try {
-            User user = User.builder()
-                    .userId(userId)
-                    .email(data.getEmail())
-                    .gender(data.getGender())
-                    .name(data.getName())
-                    .nickname(data.getNickname())
-                    .birthdate(data.getBirthdate())
-                    .phoneNumber(data.getPhoneNumber())
-                    .interests(data.getInterests())
-                    .jobs(data.getJobs())
-                    .educations(data.getEducations())
-                    .majors(data.getMajors())
-                    .personalConsent(data.isPersonalConsent())
-                    .marketingConsent(data.isMarketingConsent())
-                    .emailConsent(data.isEmailConsent())
-                    .build();
 
+            User user = UserServiceDto.SignUp.toUser(userId, data);
             userRepository.save(user);
 
             return userId;
