@@ -28,7 +28,7 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/9oogle/common-library")
 		credentials {
-			username = findProperty('gpr.user') ?: System.getenv('ㅋ')
+			username = findProperty('gpr.user') ?: System.getenv('GPR_USER2')
 			password = findProperty('gpr.token') ?: System.getenv('GPR_TOKEN2')
 		}
 	}
