@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.pgsg.chat.domain.exception.BadRequestException;
+import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -25,11 +25,11 @@ public class Seller {
 
     protected Seller(UUID id, String nickname) {
         if (id == null) {
-            throw new BadRequestException("NotBlank.sellerId", "sellerId");
+            throw new ChatServiceException("InvalidSellerIdException");
         }
 
         if (!StringUtils.hasText(nickname)) {
-            throw new BadRequestException("NotBlank.sellerNickname", "sellerNickname");
+            throw new ChatServiceException("InvalidSellerNicknameException");
         }
 
         this.id = id;

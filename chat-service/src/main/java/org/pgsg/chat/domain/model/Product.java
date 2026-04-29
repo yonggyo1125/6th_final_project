@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.pgsg.chat.domain.exception.BadRequestException;
+import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -24,13 +24,12 @@ public class Product {
 
     protected Product(UUID id, String name) {
         if (id == null) {
-            throw new BadRequestException("NotBlank.productId", "productId");
+            throw new ChatServiceException("InvalidProductIdException");
         }
 
         if (!StringUtils.hasText(name)) {
-            throw new BadRequestException("NotBlank.productName", "productName");
+            throw new ChatServiceException("InvalidProductNameException");
         }
-
 
         this.id = id;
         this.name = name;

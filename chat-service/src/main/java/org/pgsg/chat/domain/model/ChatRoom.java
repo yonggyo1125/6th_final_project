@@ -2,7 +2,9 @@ package org.pgsg.chat.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 import org.pgsg.chat.domain.event.ChatEvents;
+import org.pgsg.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +16,8 @@ import java.util.UUID;
 @ToString
 @Table(name = "p_chat_room")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoom {
+@SQLRestriction("deleted_at IS NULL")
+public class ChatRoom extends BaseEntity {
 
     @EmbeddedId
     private RoomId id;
@@ -38,7 +41,7 @@ public class ChatRoom {
     private List<ChatMessage> messages = new ArrayList<>();
 
     @Builder
-    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName) {
+    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId,String sellerNickName,UUID buyerId,String buyerNickName) {
         this.id = RoomId.of(tradeId);
         this.seller = new Seller(sellerId, sellerNickName);
         this.buyer = new Buyer(buyerId, buyerNickName);
@@ -58,7 +61,7 @@ public class ChatRoom {
 
     // 완료 상태 변경
     public void complete(ChatEvents events) {
-        if (this.status == RoomStatus.COMPLETED) { // 이미 완료 상태이면 처리 X, 멱등성 처리
+        if(this.status == RoomStatus.COMPLETED){ // 이미 완료 상태이면 처리 X, 멱등성 처리
             return;
         }
 
@@ -68,11 +71,11 @@ public class ChatRoom {
         events.completed(this);
     }
 
+    // 취소 상태 변경
     public void cancel(ChatEvents events) {
-        if (this.status == RoomStatus.CANCELED) { // 이미 취소 상태이면 처리 X
+        if(this.status == RoomStatus.CANCELED){ // 이미 취소 상태이면 처리 X, 멱등성 처리
             return;
         }
-
         this.status = RoomStatus.CANCELED;
 
         // 취소 상태 변경 후 후속 처리 알림

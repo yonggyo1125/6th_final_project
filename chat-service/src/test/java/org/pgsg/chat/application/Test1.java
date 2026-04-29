@@ -1,13 +1,12 @@
-package org.pgsg.chat;
+package org.pgsg.chat.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChatApplicationTests {
+public class Test1 {
+    @Test
+    void test1() {
 
-	@Test
-	void contextLoads() {
-	}
-
+    }
 }
