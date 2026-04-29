@@ -2,10 +2,7 @@ package com.goggles.user_service.user.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -14,7 +11,8 @@ import java.util.UUID;
 @ToString
 @Embeddable
 @EqualsAndHashCode
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserId implements Serializable {
 
     @Column(name="user_id", length=45)

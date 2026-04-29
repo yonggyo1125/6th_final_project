@@ -1,6 +1,5 @@
 package com.goggles.user_service.user.infrastructure.keycloak;
 
-import com.goggles.user_service.user.domain.UserId;
 import com.goggles.user_service.user.domain.exception.DuplicatedUserException;
 import com.goggles.user_service.user.domain.exception.IdentityProviderException;
 import com.goggles.user_service.user.domain.exception.UserNotFoundException;
@@ -83,9 +82,9 @@ public class KeycloakIdentityProvider implements IdentityProvider {
     }
 
     @Override
-    public void changePassword(UserId id, String newPassword) {
+    public void changePassword(UUID id, String newPassword) {
         UsersResource usersResource = keycloak.realm(properties.realm()).users();
-        String userId = id.getId().toString();
+        String userId = id.toString();
         try {
             usersResource.get(userId).resetPassword(getCredential(newPassword));
         } catch (NotFoundException e) {

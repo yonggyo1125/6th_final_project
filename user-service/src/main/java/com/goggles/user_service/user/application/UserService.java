@@ -1,10 +1,13 @@
 package com.goggles.user_service.user.application;
 
+import com.goggles.common.exception.ForbiddenException;
 import com.goggles.user_service.user.application.dto.UserServiceDto;
+import com.goggles.user_service.user.domain.Role;
 import com.goggles.user_service.user.domain.User;
-import com.goggles.user_service.user.domain.UserId;
 import com.goggles.user_service.user.domain.UserRepository;
 import com.goggles.user_service.user.domain.service.IdentityProvider;
+import com.goggles.user_service.user.domain.service.MessageProvider;
+import com.goggles.user_service.user.domain.service.RoleCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import java.util.UUID;
 public class UserService {
     private final IdentityProvider identityProvider;
     private final UserRepository userRepository;
+    private final RoleCheck roleCheck;
+    private final MessageProvider messageProvider;
 
     /**
      * 1. 외부 인증서버에서 계정 등록 (IdentityProvider::register()), 등록 성공시 UserId 반환
@@ -41,5 +46,13 @@ public class UserService {
             log.error("회원가입 처리 실패: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    public void changePassword(UUID userId, String newPassword) {
+        if (!roleCheck.hasRole(Role.MASTER) && !roleCheck.isMine()) {
+            throw new ForbiddenException(messageProvider.getMessage("user.exception.mine.forbidden"));
+        }
+
+        identityProvider.changePassword(userId, newPassword);
     }
 }

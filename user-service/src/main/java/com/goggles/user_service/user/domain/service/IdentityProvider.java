@@ -1,7 +1,5 @@
 package com.goggles.user_service.user.domain.service;
 
-import com.goggles.user_service.user.domain.UserId;
-
 import java.util.UUID;
 
 public interface IdentityProvider {
@@ -12,5 +10,5 @@ public interface IdentityProvider {
     void withdraw(UUID id);
 
     // 비밀번호 변경
-    void changePassword(UserId id, String newPassword);
+    void changePassword(UUID userId, String newPassword);
 }

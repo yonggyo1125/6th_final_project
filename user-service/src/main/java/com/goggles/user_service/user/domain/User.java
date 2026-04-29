@@ -183,7 +183,6 @@ public class User extends BaseTime {
         event.changed(this); // 회원 정보 변경 후속 처리
     }
 
-
     // MASTER 권한인지 체크
     private void checkMasterOnly(RoleCheck roleCheck, MessageProvider messageProvider) {
         if (!roleCheck.hasRole(Role.MASTER)) {
