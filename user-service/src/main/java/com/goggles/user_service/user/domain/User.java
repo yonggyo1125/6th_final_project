@@ -3,6 +3,7 @@ package com.goggles.user_service.user.domain;
 import com.goggles.common.domain.BaseTime;
 import com.goggles.common.exception.BadRequestException;
 import com.goggles.common.exception.ForbiddenException;
+import com.goggles.user_service.user.domain.event.UserEvent;
 import com.goggles.user_service.user.domain.exception.MasterOnlyException;
 import com.goggles.user_service.user.domain.service.MessageProvider;
 import com.goggles.user_service.user.domain.service.RoleCheck;
@@ -114,7 +115,7 @@ public class User extends BaseTime {
 
     // 역할 변경은 마스터 관리자만 가능
     // 역할은 STUDENT, INSTRUCTOR 2가지 내에서만 가능
-    public void changeRole(Role role, RoleCheck roleCheck, MessageProvider messageProvider) {
+    public void changeRole(Role role, RoleCheck roleCheck, MessageProvider messageProvider, UserEvent event) {
         if (this.role == role) { // 현재 Role과 동일하면 변경 필요 X
             return;
         }
@@ -122,13 +123,66 @@ public class User extends BaseTime {
         checkMasterOnly(roleCheck, messageProvider); // 권한 체크
 
         this.role = role;
+
+        event.changed(this); // 회원 정보 변경 후속 처리
+
     }
 
     // 기본 정보 변경
     // 로그인 사용자 본인 또는 마스터 관리자만 가능
-    public void changeBasicInfo(String name, String nickname,LocalDate birthdate, RoleCheck roleCheck, MessageProvider messageProvider) {
+    public void changeBasicInfo(String name, String nickname,LocalDate birthdate, RoleCheck roleCheck, MessageProvider messageProvider, UserEvent event) {
+        if (name.equals(this.name) &&  nickname.equals(this.nickname) && birthdate == this.birthdate) { // 회원 정보의 변경이 없으면 처리하지 않음.
+            return;
+        }
 
+        checkMine(roleCheck, messageProvider); // 권한 체크
+
+        this.name = name;
+        this.nickname = nickname;
+        this.birthdate = birthdate;
+
+        event.changed(this); // 회원 정보 변경 후속 처리
     }
+
+    // 연락처 변경, 이메일은 로그인 계정으로 사용되므로 변경 불가
+    // 휴대전화번호만 변경 가능, 본인 또는 마스터 관리자만 가능
+    public void changePhoneNumber(String phoneNumber, RoleCheck roleCheck, MessageProvider messageProvider, UserEvent event) {
+        if(phoneNumber.equals(this.contact.getPhoneNumber())) {
+           return; // 전화번호 변경이 없으면 처리하지 않음
+        }
+
+        checkMine(roleCheck, messageProvider); // 권한 체크
+
+        this.contact = new Contact(this.contact.getEmail(), phoneNumber, messageProvider);
+
+        event.changed(this); // 회원 정보 변경 후속 처리
+    }
+
+    // 약관 동의 변경 - 마스터 또는 본인만 변경 가능
+    public void changeConsent(boolean personal, boolean marketing, boolean email, RoleCheck roleCheck, MessageProvider messageProvider, UserEvent event) {
+        if (personal == this.consent.isPersonal() && marketing == this.consent.isMarketing() && email == this.consent.isEmail()) {
+            return; // 변경사항이 없으면 처리하지 않음
+        }
+
+        checkMine(roleCheck, messageProvider); // 권한 체크
+
+        this.consent = new Consent(personal, marketing, email, messageProvider);
+
+        event.changed(this); // 회원 정보 변경 후속 처리
+    }
+
+    /**
+     * 프로필 정보는 필수가 아니다! 없으면 없는대로 저장
+     * 마스터 또는 본인만 수정 가능
+     */
+    public void changeProfile(List<Interest> interests, List<Job> jobs, List<String> educations, List<String> majors, RoleCheck roleCheck,MessageProvider messageProvider, UserEvent event) {
+        checkMine(roleCheck,messageProvider); // 권한 체크
+
+        this.profile = new Profile(interests, jobs, educations, majors, messageProvider);
+
+        event.changed(this); // 회원 정보 변경 후속 처리
+    }
+
 
     // MASTER 권한인지 체크
     private void checkMasterOnly(RoleCheck roleCheck, MessageProvider messageProvider) {
