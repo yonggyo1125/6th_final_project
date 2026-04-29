@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class MessageProviderImpl implements MessageProvider {
     @Override
     public String getMessage(String code, Object... args) {
-        return null;
+        // MessageUtil로 구현 필요!
+        return code;
     }
 }
