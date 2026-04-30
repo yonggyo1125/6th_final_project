@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.pgsg.chat.application.dto.CreateChatRoomCommand;
 import org.pgsg.chat.application.service.ChatService;
+import org.pgsg.chat.infrastructure.listener.dto.TradeCreated;
 import org.pgsg.common.messaging.annotation.IdempotentConsumer;
 import org.pgsg.common.util.JsonUtil;
 import org.springframework.kafka.annotation.KafkaListener;

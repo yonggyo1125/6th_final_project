@@ -1,4 +1,4 @@
-package org.pgsg.chat.infrastructure.listener;
+package org.pgsg.chat.infrastructure.listener.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
