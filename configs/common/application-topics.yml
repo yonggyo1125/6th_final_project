@@ -1,10 +1,21 @@
 topics:
   user:
-    approved: prod-user-approved # 회원 승인
-    deleted: prod-user-deleted # 회원 탈퇴
+    approved: prod-user-approved
+    deleted: prod-user-deleted
 
-  store:
-    updated: prod-store-updated # 업체 정보 수정됨
+  product:
+    created: prod-product-created
+    updated: prod-product-updated
+    deleted: prod-product-deleted
 
-  hub:
-    updated: prod-hub-updated # 허브 정보 수정됨
+  trade:
+    created: prod-trade-created
+    completed: prod-trade-completed
+    cancelled: prod-trade-cancelled
+
+  chat:
+    room-created: prod-chat-room-created
+    message-sent: prod-chat-message-sent
+
+  reservation:
+    completed: prod-reservation-completed

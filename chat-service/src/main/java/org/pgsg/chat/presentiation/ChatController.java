@@ -7,8 +7,6 @@ import org.pgsg.chat.presentiation.dto.ChatRelay;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -24,19 +22,5 @@ public class ChatController {
         log.info("메세지 전송: roomId: {}, chatRelay: {}", roomId, chatRelay);
         chatService.addMessage(roomId, chatRelay.type(), chatRelay.message());
         return chatRelay;
-    }
-
-    @PostMapping("/{roomId}/complete")
-    public void completeChat(@PathVariable("roomId") UUID roomId) {
-        log.info("거래 완료 처리: {}", roomId);
-
-        chatService.complete(roomId);
-    }
-
-    @PostMapping("/{roomId}/cancel")
-    public void cancelChat(@PathVariable("roomId") UUID roomId) {
-        log.info("거래 취소 처리: {}", roomId);
-
-        chatService.cancel(roomId);
     }
 }
