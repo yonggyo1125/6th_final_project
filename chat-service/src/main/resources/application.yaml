@@ -19,3 +19,9 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${EUREKA_SERVER_URL1:localhost}:13101/eureka/
+
+
+# 임시
+topic:
+  trade:
+    created: trade.created

@@ -1,18 +1,18 @@
 package org.pgsg.chat.infrastructure.event;
 
 import org.pgsg.chat.domain.event.ChatEvents;
-import org.pgsg.chat.domain.model.ChatRoom;
+import org.pgsg.chat.domain.model.Room;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ChatEventsImpl implements ChatEvents {
     @Override
-    public void completed(ChatRoom room) {
+    public void completed(Room room) {
 
     }
 
     @Override
-    public void canceled(ChatRoom room) {
+    public void canceled(Room room) {
 
     }
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중고거래 채팅</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div class="chat-container">
+    <!-- 상단 헤더 및 액션 버튼 -->
+    <header class="chat-header">
+        <h2>중고거래 채팅</h2>
+        <div class="action-buttons">
+            <button onclick="updateRoomStatus('COMPLETED')" class="btn-complete">거래 완료</button>
+            <button onclick="updateRoomStatus('CANCELED')" class="btn-cancel">거래 취소</button>
+        </div>
+    </header>
+
+    <!-- 채팅 메시지 표시 영역 -->
+    <div id="chat-box" class="chat-box">
+        <div class="system-message">채팅방에 입장하셨습니다.</div>
+    </div>
+
+    <!-- 메시지 입력 영역 -->
+    <div class="chat-input-area">
+        <!-- 테스트용 역할 선택 -->
+        <select id="user-role" class="role-select">
+            <option value="BUYER">구매자 (나)</option>
+            <option value="SELLER">판매자 (나)</option>
+        </select>
+
+        <input type="text" id="message-input" placeholder="메시지를 입력하세요..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()" class="btn-send">전송</button>
+    </div>
+</div>
+
+<script src="chat.js"></script>
+</body>
+</html>

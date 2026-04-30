@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class ChatMessage {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class ChatMessage {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public static ChatMessage of(SenderType type, String content) {
+    public static Message of(SenderType type, String content) {
         if (type ==null) {
             throw new ChatServiceException("InvalidSenderTypeException");
         }
@@ -42,9 +42,9 @@ public class ChatMessage {
         if (content == null || content.isBlank()) {
             throw new ChatServiceException("EmptyChatMessageException");
         }
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.senderType = type;
-        chatMessage.content = content;
-        return chatMessage;
+        Message message = new Message();
+        message.senderType = type;
+        message.content = content;
+        return message;
     }
 }

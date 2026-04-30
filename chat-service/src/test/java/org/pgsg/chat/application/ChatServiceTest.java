@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.pgsg.chat.application.dto.CreateChatRoomCommand;
 import org.pgsg.chat.application.service.ChatService;
-import org.pgsg.chat.domain.model.ChatRoom;
+import org.pgsg.chat.domain.model.Room;
 import org.pgsg.chat.domain.model.RoomId;
 import org.pgsg.chat.domain.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +45,12 @@ public class ChatServiceTest {
 
         // when
         chatService.createRoom(command);
-        ChatRoom chatRoom = chatRoomRepository.findById(RoomId.of(tradeId))
+        Room room = chatRoomRepository.findById(RoomId.of(tradeId))
                 .orElse(null);
 
         // then
-        assertNotNull(chatRoom);
-        assertEquals(tradeId, chatRoom.getId().getId());
-        log.info("chatRoom={}", chatRoom);
+        assertNotNull(room);
+        assertEquals(tradeId, room.getId().getId());
+        log.info("chatRoom={}", room);
     }
 }

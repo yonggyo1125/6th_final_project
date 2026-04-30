@@ -31,9 +31,9 @@ public class TradeCreatedListener {
                         created.productId(),
                         created.productName(),
                         created.sellerId(),
-                        created.sellerNickname(),
+                        created.sellerNickName(),
                         created.buyerId(),
-                        created.buyerNickname()
+                        created.buyerNickName()
                 ));
                 ack.acknowledge(); // 커밋, 오프셋 기록
                 log.info("채팅방 생성 성공: roomId: {}", created.tradeId());
@@ -44,7 +44,7 @@ public class TradeCreatedListener {
         }
     }
 
-    @KafkaListener(topics = "${topic.trade.created}.DLT", groupId="chat-service")
+    @KafkaListener(topics = "${topic.trade.created}-dlt", groupId="chat-service")
     public void handleDLT(Message<String> message, Acknowledgment ack) {
         log.error("채팅방 생성 최종 실패(DLT), 수동 처리 요망");
         // 수동 처리를 위한 DB 기록 필요!

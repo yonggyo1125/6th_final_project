@@ -18,7 +18,7 @@ import java.util.UUID;
 @Table(name = "p_chat_room")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at IS NULL")
-public class ChatRoom extends BaseEntity {
+public class Room extends BaseEntity {
 
     @EmbeddedId
     private RoomId id;
@@ -39,10 +39,10 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name="chatroom_id")
     @OrderBy("createdAt ASC")
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMessage> messages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 
     @Builder
-    public ChatRoom(UUID tradeId,UUID productId, String productName, UUID sellerId,String sellerNickName,UUID buyerId,String buyerNickName) {
+    public Room(UUID tradeId, UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName) {
         this.id = RoomId.of(tradeId);
         this.seller = new Seller(sellerId, sellerNickName);
         this.buyer = new Buyer(buyerId, buyerNickName);
@@ -55,7 +55,7 @@ public class ChatRoom extends BaseEntity {
         if(this.status != RoomStatus.TRADING){
             throw new ChatServiceException("InvalidRoomStatusTransitionException");
         }
-        this.messages.add(ChatMessage.of(type, content));
+        this.messages.add(Message.of(type, content));
     }
 
     // 마지막 메세지 등록 일시
