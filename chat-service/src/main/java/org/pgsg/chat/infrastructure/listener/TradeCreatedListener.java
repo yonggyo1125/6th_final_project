@@ -10,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
@@ -19,9 +18,8 @@ public class TradeCreatedListener {
 
     private final ChatService chatService;
 
-    @Transactional
-    @IdempotentConsumer("topic.trade.created")
-    @KafkaListener(topics = "${topic.trade.created}", groupId="chat-service")
+    @IdempotentConsumer("topics.trade.created")
+    @KafkaListener(topics = "${topics.trade.created}", groupId="chat-service")
     public void onTradeCreated(Message<String> message, Acknowledgment ack) {
         try {
             TradeCreated created = JsonUtil.fromJson(message.getPayload(), TradeCreated.class);
@@ -44,7 +42,7 @@ public class TradeCreatedListener {
         }
     }
 
-    @KafkaListener(topics = "${topic.trade.created}-dlt", groupId="chat-service")
+    @KafkaListener(topics = "${topics.trade.created}-dlt", groupId="chat-service")
     public void handleDLT(Message<String> message, Acknowledgment ack) {
         log.error("채팅방 생성 최종 실패(DLT), 수동 처리 요망");
         // 수동 처리를 위한 DB 기록 필요!
