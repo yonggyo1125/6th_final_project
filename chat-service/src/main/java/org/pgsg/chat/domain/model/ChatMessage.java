@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -34,6 +35,13 @@ public class ChatMessage {
     private LocalDateTime createdAt;
 
     public static ChatMessage of(SenderType type, String content) {
+        if (type ==null) {
+            throw new ChatServiceException("InvalidSenderTypeException");
+        }
+
+        if (content == null || content.isBlank()) {
+            throw new ChatServiceException("EmptyChatMessageException");
+        }
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.senderType = type;
         chatMessage.content = content;

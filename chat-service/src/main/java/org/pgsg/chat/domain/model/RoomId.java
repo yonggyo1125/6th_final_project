@@ -3,6 +3,7 @@ package org.pgsg.chat.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
+import org.pgsg.chat.domain.exception.InvalidTradeIdException;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -19,6 +20,9 @@ public class RoomId implements Serializable {
 
 
     public static RoomId of(UUID tradeId){
+        if(tradeId == null){
+            throw new InvalidTradeIdException();
+        }
         return new RoomId(tradeId);
     }
 
