@@ -89,7 +89,7 @@ function updateRoomStatus(status) {
     const endpoint = status === 'COMPLETED' ? 'complete' : 'cancel';
 
     // 백엔드 제안 코드의 API 호출 (Fetch API 사용)
-    fetch(`http://localhost:10002/api/chat/${ROOM_ID}/${endpoint}`, {
+    fetch(`http://localhost:10002/${ROOM_ID}/${endpoint}`, {
         method: 'POST',
     })
         .then(response => {

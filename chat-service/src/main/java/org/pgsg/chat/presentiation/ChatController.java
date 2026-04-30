@@ -27,14 +27,16 @@ public class ChatController {
     }
 
     @PostMapping("/{roomId}/complete")
-    public void completeChat(@PathVariable UUID roomId) {
-
+    public void completeChat(@PathVariable("roomId") UUID roomId) {
         log.info("거래 완료 처리: {}", roomId);
+
+        chatService.complete(roomId);
     }
 
     @PostMapping("/{roomId}/cancel")
-    public void cancelChat(@PathVariable UUID roomId) {
-
+    public void cancelChat(@PathVariable("roomId") UUID roomId) {
         log.info("거래 취소 처리: {}", roomId);
+
+        chatService.cancel(roomId);
     }
 }
