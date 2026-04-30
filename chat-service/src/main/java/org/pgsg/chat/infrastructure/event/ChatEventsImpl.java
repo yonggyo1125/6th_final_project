@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ChatEventsImpl implements ChatEvents {
     @Override
     public void completed(Room room) {
-
+        
     }
 
     @Override
