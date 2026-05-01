@@ -30,9 +30,9 @@ public class TradeCreatedListener {
                         created.productId(),
                         created.productName(),
                         created.sellerId(),
-                        created.sellerNickName(),
+                        created.sellerNickname(),
                         created.buyerId(),
-                        created.buyerNickName()
+                        created.buyerNickname()
                 ));
                 ack.acknowledge(); // 커밋, 오프셋 기록
                 log.info("채팅방 생성 성공: roomId: {}", created.tradeId());

@@ -10,7 +10,7 @@ public record TradeCreated(
     UUID productId,
     String productName,
     UUID sellerId,
-    String sellerNickName,
+    String sellerNickname,
     UUID buyerId,
-    String buyerNickName
+    String buyerNickname
 ) {}

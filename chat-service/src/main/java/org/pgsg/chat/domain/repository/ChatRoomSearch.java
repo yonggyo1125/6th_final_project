@@ -1,10 +1,12 @@
 package org.pgsg.chat.domain.repository;
 
+import lombok.Builder;
 import org.pgsg.chat.domain.model.RoomId;
 
 import java.util.List;
 import java.util.UUID;
 
+@Builder
 public record ChatRoomSearch(
    List<RoomId> roomIds,
    List<UUID> userIds,

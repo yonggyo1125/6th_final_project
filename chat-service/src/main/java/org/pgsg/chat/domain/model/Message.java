@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.pgsg.chat.domain.exception.ChatErrorCode;
 import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,11 +37,11 @@ public class Message {
 
     public static Message of(SenderType type, String content) {
         if (type ==null) {
-            throw new ChatServiceException("InvalidSenderTypeException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_SENDER_INVALID_TYPE);
         }
 
         if (content == null || content.isBlank()) {
-            throw new ChatServiceException("EmptyChatMessageException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_MESSAGE_EMPTY);
         }
         Message message = new Message();
         message.senderType = type;

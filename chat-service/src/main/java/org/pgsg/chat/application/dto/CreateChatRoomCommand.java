@@ -1,5 +1,6 @@
 package org.pgsg.chat.application.dto;
 
+import org.pgsg.chat.domain.event.ChatEvents;
 import org.pgsg.chat.domain.model.Room;
 
 import java.util.UUID;
@@ -13,7 +14,7 @@ public record CreateChatRoomCommand(
         UUID buyerId,
         String buyerNickName
 ) {
-    public Room toChatRoom() {
+    public Room toChatRoom(ChatEvents chatEvents) {
         return Room.builder()
                 .tradeId(tradeId)
                 .productId(productId)
@@ -22,6 +23,7 @@ public record CreateChatRoomCommand(
                 .sellerNickName(sellerNickName)
                 .buyerId(buyerId)
                 .buyerNickName(buyerNickName)
+                .chatEvents(chatEvents)
                 .build();
     }
 }

@@ -1,61 +1,67 @@
 error:
   configs:
-    ChatRoomNotFoundException:
+    # Chat Room Core
+    "[chat.room.not-found]":
       code: "C001"
       message: "채팅방을 찾을 수 없습니다."
       status: 404
+    "[chat.room.already-exists]":
+      code: "C012"
+      message: "이미 존재하는 채팅방 입니다."
+      status: 409
+    "[chat.room.invalid-status-transition]":
+      code: "C014"
+      message: "채팅 방의 상태가 올바르지 않습니다."
+      status: 400
 
-    InvalidSellerIdException:
+    # User Validation
+    "[chat.validation.seller-id.required]":
       code: "C002"
       message: "판매자의 id 값이 Null일 수 없습니다."
       status: 400
-
-    InvalidBuyerIdException:
+    "[chat.validation.buyer-id.required]":
       code: "C003"
       message: "구매자의 id 값이 Null일 수 없습니다."
       status: 400
-
-    InvalidProductIdException:
-      code: "C004"
-      message: "상품의 id 값이 Null일 수 없습니다."
-      status: 400
-
-    InvalidTradeIdException:
-      code: "C005"
-      message: "거래의 id 값이 Null일 수 없습니다."
-      status: 400
-
-    InvalidSellerNicknameException:
+    "[chat.validation.seller-nickname.required]":
       code: "C006"
       message: "판매자의 이름이 Null일 수 없습니다."
       status: 400
-
-    InvalidBuyerNicknameException:
+    "[chat.validation.buyer-nickname.required]":
       code: "C007"
       message: "구매자의 이름이 Null일 수 없습니다."
       status: 400
 
-    InvalidProductNameException:
+    # Product & Trade Validation
+    "[chat.validation.product-id.required]":
+      code: "C004"
+      message: "상품의 id 값이 Null일 수 없습니다."
+      status: 400
+    "[chat.validation.product-name.required]":
       code: "C008"
       message: "상품명이 Null일 수 없습니다."
       status: 400
+    "[chat.validation.trade-id.required]":
+      code: "C005"
+      message: "거래의 id 값이 Null일 수 없습니다."
+      status: 400
 
-    HasStatusCompleteException:
+    # Status Validation
+    "[chat.status.already-completed]":
       code: "C009"
       message: "채팅방의 상태가 거래 완료입니다."
       status: 400
-
-    HasStatusCancelException:
+    "[chat.status.already-canceled]":
       code: "C010"
       message: "채팅방의 상태가 거래 취소입니다."
       status: 400
 
-    EmptyChatMessageException:
+    # Message & Sender Validation
+    "[chat.message.empty]":
       code: "C011"
-      message: "메세지는 빈 상태로 보낼 수 없습니다."
+      message: "메시지는 빈 상태로 보낼 수 없습니다."
       status: 400
-
-    AlreadyChatRoomException:
-      code: "C012"
-      message: "이미 존재하는 채팅방 입니다."
-      status: 409
+    "[chat.sender.invalid-type]":
+      code: "C013"
+      message: "발신자 유형이 올바르지 않습니다."
+      status: 400

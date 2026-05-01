@@ -21,14 +21,15 @@ public class ChatService {
 
     @Transactional
     public void createRoom(CreateChatRoomCommand dto) {
-        chatRoomRepository.save(dto.toChatRoom());
+
+        chatRoomRepository.save(dto.toChatRoom(chatEvents));
     }
 
 
     // 채팅 대화 기록
     @Transactional
     public void addMessage(UUID roomId, String senderType, String message) {
-        getRoom(roomId).addMessage(SenderType.valueOf(senderType), message);
+        getRoom(roomId).addMessage(SenderType.valueOf(senderType), message, chatEvents);
     }
 
     // 거래 성공 처리

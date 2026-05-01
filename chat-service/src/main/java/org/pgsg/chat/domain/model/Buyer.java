@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.pgsg.chat.domain.exception.ChatErrorCode;
 import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.springframework.util.StringUtils;
 
@@ -25,11 +26,11 @@ public class Buyer {
 
     protected Buyer(UUID id, String nickname) {
         if (id == null) {
-            throw new ChatServiceException("InvalidBuyerIdException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_VALIDATION_BUYER_ID_REQUIRED);
         }
 
         if (!StringUtils.hasText(nickname)) {
-            throw new ChatServiceException("InvalidBuyerNicknameException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_VALIDATION_BUYER_NICKNAME_REQUIRED);
         }
         this.id = id;
         this.nickname = nickname;

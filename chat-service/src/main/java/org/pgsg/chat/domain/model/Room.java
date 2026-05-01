@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 import org.pgsg.chat.domain.event.ChatEvents;
+import org.pgsg.chat.domain.exception.ChatErrorCode;
 import org.pgsg.chat.domain.exception.ChatServiceException;
 import org.pgsg.common.domain.BaseEntity;
 
@@ -42,20 +43,25 @@ public class Room extends BaseEntity {
     private List<Message> messages = new ArrayList<>();
 
     @Builder
-    public Room(UUID tradeId, UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName) {
+    public Room(UUID tradeId, UUID productId, String productName, UUID sellerId, String sellerNickName, UUID buyerId, String buyerNickName, ChatEvents chatEvents) {
         this.id = RoomId.of(tradeId);
         this.seller = new Seller(sellerId, sellerNickName);
         this.buyer = new Buyer(buyerId, buyerNickName);
         this.product = new Product(productId, productName);
         this.status = RoomStatus.TRADING;
+
+        // 방생성 후 이벤트 발행
+        chatEvents.roomCreated(this);
     }
 
     // 채팅 메세지 등록
-    public void addMessage(SenderType type, String content){
+    public void addMessage(SenderType type, String content, ChatEvents chatEvents) {
         if(this.status != RoomStatus.TRADING){
-            throw new ChatServiceException("InvalidRoomStatusTransitionException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_ROOM_INVALID_STATUS_TRANSITION);
         }
-        this.messages.add(Message.of(type, content));
+        Message message = Message.of(type, content);
+        this.messages.add(message);
+        chatEvents.messageSent(message);
     }
 
     // 마지막 메세지 등록 일시
@@ -69,7 +75,7 @@ public class Room extends BaseEntity {
             return;
         }
         if(this.status == RoomStatus.CANCELED){
-            throw new ChatServiceException("InvalidRoomStatusTransitionException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_ROOM_INVALID_STATUS_TRANSITION);
         }
 
         this.status = RoomStatus.COMPLETED;
@@ -84,7 +90,7 @@ public class Room extends BaseEntity {
             return;
         }
         if(this.status == RoomStatus.COMPLETED){
-            throw new ChatServiceException("InvalidRoomStatusTransitionException");
+            throw new ChatServiceException(ChatErrorCode.CHAT_ROOM_INVALID_STATUS_TRANSITION);
         }
         this.status = RoomStatus.CANCELED;
 

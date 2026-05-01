@@ -34,7 +34,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 
 	// common 공통 모듈
-	implementation 'org.pgsg:common:0.0.1-SNAPSHOT'
+	implementation 'org.pgsg:common:0.2.2-SNAPSHOT'
 
 	// STOMP WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
