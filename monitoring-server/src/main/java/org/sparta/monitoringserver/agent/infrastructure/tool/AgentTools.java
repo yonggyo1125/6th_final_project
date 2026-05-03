@@ -124,7 +124,7 @@ public class AgentTools {
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(5))
-                    .block(); // [핵심] 전송 완료 후 응답이 올 때까지 대기
+                    .block(); // 전송 완료 후 응답이 올 때까지 대기
 
             log.info("슬랙 전송 성공 응답: {}", result);
             return "슬랙 보고 완료: " + result;
