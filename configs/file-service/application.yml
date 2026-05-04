@@ -27,3 +27,14 @@ logging:
   level:
     org.hibernate.type: trace
     org.hibernate.orm.jdbc.bind: trace
+
+
+# 파일 설정
+file:
+  storage:
+    type: local
+
+  local:
+    base:
+      path: ${FILE_BASE_PATH:./storage/files}
+      url: ${FILE_BASE_URL:/upload}
