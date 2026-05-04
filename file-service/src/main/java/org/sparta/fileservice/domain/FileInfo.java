@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @ToString
@@ -24,4 +26,9 @@ public class FileInfo {
 
     @Embedded
     private FileMeta metadata;
+
+    private String filePath;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime deletedAt;
 }
