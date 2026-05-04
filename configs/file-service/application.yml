@@ -37,4 +37,4 @@ file:
   local:
     base:
       path: ${FILE_BASE_PATH:./storage/files}
-      url: ${FILE_BASE_URL:/upload}
+      url: ${FILE_BASE_URL:/upload/}
