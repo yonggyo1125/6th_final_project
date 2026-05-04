@@ -42,7 +42,14 @@ public class FileMeta {
 
         this.contentType = StringUtils.hasText(contentType) ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
         this.extension = StringUtils.hasText(fileName) ? extractExtension(fileName) : null;
+    }
 
+    public boolean isImage() {
+        return StringUtils.hasText(contentType) && contentType.contains("image/");
+    }
+
+    public boolean isVideo() {
+        return StringUtils.hasText(contentType) && contentType.contains("video/");
     }
 
     private String extractExtension(String fileName) {
