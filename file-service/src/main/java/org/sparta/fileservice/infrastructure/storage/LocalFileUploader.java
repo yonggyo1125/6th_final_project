@@ -9,6 +9,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Component
 @ConditionalOnProperty(
         name = "file.storage.type",
@@ -23,6 +27,16 @@ public class LocalFileUploader implements FileUploader {
 
     @Override
     public String upload(FileTag tag, FileInfo.FileSource source) {
+        Path rootPath = Path.of(properties.path()).toAbsolutePath().normalize();
+        Path targetDirectory = rootPath.resolve(tag.name().toLowerCase());
+
+        try {
+            if (!Files.exists(targetDirectory)) {
+                Files.createDirectories(targetDirectory);
+            }
+        } catch (IOException e) {
+
+        }
         return null;
     }
 
