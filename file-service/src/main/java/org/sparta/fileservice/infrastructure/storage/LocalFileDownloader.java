@@ -20,9 +20,4 @@ public class LocalFileDownloader implements FileDownloader {
     public FileDownloadContent download(FileInfo fileInfo) {
         return null;
     }
-
-    @Override
-    public void close() throws Exception {
-
-    }
 }

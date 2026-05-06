@@ -19,8 +19,4 @@ public class S3FileDownloader implements FileDownloader {
         return null;
     }
 
-    @Override
-    public void close() throws Exception {
-
-    }
 }

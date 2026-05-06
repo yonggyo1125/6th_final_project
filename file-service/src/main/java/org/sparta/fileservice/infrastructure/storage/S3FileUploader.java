@@ -20,8 +20,4 @@ public class S3FileUploader implements FileUploader {
         return "";
     }
 
-    @Override
-    public void close() throws Exception {
-
-    }
 }

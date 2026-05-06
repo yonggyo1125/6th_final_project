@@ -10,8 +10,8 @@ import org.sparta.fileservice.infrastructure.storage.config.LocalStorageProperti
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,24 +52,20 @@ public class LocalFileUploader implements FileUploader {
 
             log.info("로컬 파일 업로드 성공 - 업로드 경로: {}", targetFile);
 
-            return tag.name().toLowerCase() + File.separator + storeFileName;
+            return tag.name().toLowerCase() + "/" + storeFileName;
         } catch (IOException e) {
             log.error("로컬 파일 업로드 실패: {}", e.getMessage(), e);
-            throw new FileStorageException("파일 업로드 중 오류가 발생하였습니다.");
+            throw new FileStorageException("파일 저장 중 시스템 오류가 발생하였습니다.");
         }
     }
 
-    @Override
-    public void close() throws Exception {
-        log.debug("로컬 파일 업로드 closed() 호출...");
-    }
-
     private String createStoreFileName(String originalFileName) {
-        return UUID.randomUUID().toString() + extractExtension(originalFileName);
+        String ext = extractExtension(originalFileName);
+        return UUID.randomUUID() + (!StringUtils.hasText(ext) ? "" : "." + ext);
     }
 
     private String extractExtension(String fileName) {
-        int index = fileName.lastIndexOf(".");
-        return index == -1 ? "" : fileName.substring(index);
+        if (fileName == null || !fileName.contains(".")) return "";
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

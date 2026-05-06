@@ -7,6 +7,6 @@ import org.sparta.fileservice.domain.FileTag;
  * 반환값은 업로드된 물리적 경로
  *
  */
-public interface FileUploader extends AutoCloseable {
+public interface FileUploader {
     String upload(FileTag tag, FileInfo.FileSource source);
 }
