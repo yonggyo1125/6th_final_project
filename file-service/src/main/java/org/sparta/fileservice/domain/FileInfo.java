@@ -3,7 +3,7 @@ package org.sparta.fileservice.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
-import org.sparta.fileservice.domain.exception.FileUploadException;
+import org.sparta.fileservice.domain.exception.FileStorageException;
 import org.sparta.fileservice.domain.service.FileUploader;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -51,7 +51,7 @@ public class FileInfo {
        // 파일 업로드 처리 먼저
         String filePath = fileUploader.upload(tagName, source);
         if (!StringUtils.hasText(filePath)) {
-            throw new FileUploadException("파일 저장소 업로드에 실패하였습니다.");
+            throw new FileStorageException("파일 저장소 업로드에 실패하였습니다.");
         }
 
         return FileInfo.builder()

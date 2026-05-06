@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Storage {
     LOCAL("서버 로컬 저장소"), // 로컬 서버
-    S3("AWS S3 버킷");
+    S3("AWS S3 버킷"),
+    GCS("GOOGLE Cloud Storage");
 
     private final String description;
 }
