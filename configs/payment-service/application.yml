@@ -38,3 +38,7 @@ file:
     base:
       path: ${FILE_BASE_PATH:./storage/files}
       url: ${FILE_BASE_URL:/upload/}
+
+toss:
+  secret:
+    key: ${TOSS_API_KEY}
