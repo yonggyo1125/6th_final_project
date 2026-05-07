@@ -1,5 +1,6 @@
 package com.goggles.payment_service.domain;
 
+import com.goggles.payment_service.domain.exception.PaymentTransitionException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,25 @@ public enum PaymentStatus {
 
   private final String description;
 
+  // 상태 전이가 가능한지 검증
   public static void validateTransition(PaymentStatus currentStatus, PaymentStatus newStatus) {
 
+    boolean possible = true;
+    switch (newStatus) {
+      case IN_PROGRESS, WAITING_FOR_DEPOSIT, ABORTED, EXPIRED, DONE -> {
+        if (currentStatus != PaymentStatus.READY) {
+          possible = false;
+        }
+      }
+      case CANCELLED, PARTIAL_CANCELLED -> {
+        if (currentStatus != PaymentStatus.DONE) {
+          possible = false;
+        }
+      }
+    }
+
+    if (!possible) {
+      throw new PaymentTransitionException(currentStatus, newStatus);
+    }
   }
 }
