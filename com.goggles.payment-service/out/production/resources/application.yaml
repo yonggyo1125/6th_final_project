@@ -1,6 +1,6 @@
 spring:
   application:
-    name: file-service
+    name: payment-service
 
   config:
     import:
