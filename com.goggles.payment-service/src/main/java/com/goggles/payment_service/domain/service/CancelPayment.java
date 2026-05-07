@@ -1,6 +1,7 @@
 package com.goggles.payment_service.domain.service;
 
-public interface CancelPayment {
+import com.goggles.payment_service.domain.PaymentId;
 
-  CancelResult cancel(String paymentId, String paymentKey, String cancelReason);
+public interface CancelPayment {
+    CancelResult cancel(PaymentId paymentId, String transactionId, String cancelReason);
 }

@@ -4,6 +4,9 @@ import static com.goggles.payment_service.domain.PaymentFixture.createReadyPayme
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import legacy.domain.Payment;
+import legacy.domain.PaymentMethod;
+import legacy.domain.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

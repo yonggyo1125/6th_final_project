@@ -1,5 +1,7 @@
 package com.goggles.payment_service.domain;
 
+import legacy.domain.Payment;
+
 import java.util.UUID;
 
 public class PaymentFixture {

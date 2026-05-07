@@ -1,16 +1,15 @@
 package com.goggles.payment_service.domain.service;
 
+import com.goggles.payment_service.domain.PaymentStatus;
+
 import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-@Builder
-public class ApproveResult {
-
-  private final boolean success;
-  private final String paymentKey;
-  private final String failReason;
-  private final LocalDateTime approveAt;
-  private final String paymentLog;
-}
+public record ApproveResult(
+        boolean success,
+        String reason, // 실패시 사유
+        String transactionId,
+        PaymentStatus status,
+        LocalDateTime paidAt, // 승인 시간
+        long approvedAmount, // 실제 결제된 긍액
+        String paymentLog
+) {}

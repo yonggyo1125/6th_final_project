@@ -1,5 +1,8 @@
 package com.goggles.payment_service.domain.service;
 
+import com.goggles.payment_service.domain.OrderDetail;
+import com.goggles.payment_service.domain.PaymentId;
+
 public interface ApprovePayment {
-  ApproveResult request(String paymentId, String paymentKey, String orderId, Long amount);
+    ApproveResult request(PaymentId paymentId, String transactionId, OrderDetail orderDetail);
 }
