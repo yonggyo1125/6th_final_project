@@ -1,13 +1,14 @@
 package com.goggles.payment_service.infrastructure.toss;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.net.URI;
-import java.util.Base64;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+
+import java.net.URI;
+import java.util.Base64;
 
 @Getter
 @Component
@@ -18,7 +19,7 @@ public class TossApiHelper {
 
   private final RestClient restClient;
 
-  public TossApiHelper(@Value("${toss.secret-key}") String secretKey) {
+  public TossApiHelper(@Value("${TOSS_API_KEY}") String secretKey) {
     String encodedSecretKey = Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
 
     restClient =
