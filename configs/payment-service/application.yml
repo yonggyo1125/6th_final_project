@@ -40,5 +40,4 @@ file:
       url: ${FILE_BASE_URL:/upload/}
 
 toss:
-  secret:
-    key: ${TOSS_API_KEY}
+  secret-key: ${TOSS_API_KEY}
