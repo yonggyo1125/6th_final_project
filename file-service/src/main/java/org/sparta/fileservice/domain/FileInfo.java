@@ -68,6 +68,7 @@ public class FileInfo {
     public record FileSource(
             InputStream inputStream,
             String originalFileName,
-            String contentType
+            String contentType,
+            long contentLength
     ) {}
 }
