@@ -60,7 +60,7 @@ public class Payment extends BaseTime {
      * 2. 주문 정보의 결제 요청 금액과 실제로 결제된 금액이 다른 경우는 변조된 것으로 간주
      * 3. 결제금액이 변조가 되었으면 환불처리를 진행
      */
-    public void approve(String transactionId, ApprovePayment approvePayment, CancelPayment cancelPayment) {
+    public void approve(String paymentKey, ApprovePayment approvePayment, CancelPayment cancelPayment) {
 
     }
 

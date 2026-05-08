@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TossCancelPayment implements CancelPayment {
     @Override
-    public CancelResult cancel(PaymentId paymentId, String transactionId, String cancelReason) {
+    public CancelResult cancel(PaymentId paymentId, String paymentKey, String cancelReason) {
         return null;
     }
 }

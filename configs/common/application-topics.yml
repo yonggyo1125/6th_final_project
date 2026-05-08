@@ -1,21 +1,25 @@
 topics:
-  user:
-    approved: prod-user-approved
-    deleted: prod-user-deleted
+  order:
+    payment-pending: order.payment-pending.v1
+    payment-cancel: order.payment-canceled.v1
+    notification-completed: order.notification-completed.v1
+    notification-cancelled: order.notification-canceled.v1
+    lecture-completed: order.lecture-completed.v1
+    lecture-cancelled: order.lecture-canceled.v1
+    mentoring-completed: order.mentoring-completed.v1
+    mentoring-cancelled: order.mentoring-canceled.v1
 
-  product:
-    created: prod-product-created
-    updated: prod-product-updated
-    deleted: prod-product-deleted
+  payment:
+    confirmed: payment.confirmed.v1
+    confirm-failed: payment.confirm-failed.v1
+    canceled: payment.canceled.v1
+    cancel-failed: payment.cancel-failed.v1
 
-  trade:
-    created: prod-trade-created
-    completed: prod-trade-completed
-    cancelled: prod-trade-cancelled
-
-  chat:
-    room-created: prod-chat-room-created
-    message-sent: prod-chat-message-sent
-
-  reservation:
-    completed: prod-reservation-completed
+  booking:
+    payment-completed: mentoring.booking.payment_completed.v1
+    payment-failed: mentoring.booking.payment_failed.v1
+    accepted: mentoring.booking.accepted.v1
+    rejected: mentoring.booking.rejected.v1
+    canceled: mentoring.booking.canceled.v1
+    requested: mentoring.booking.requested.v1
+    pending-approval: mentoring.booking.pending_approval.v1

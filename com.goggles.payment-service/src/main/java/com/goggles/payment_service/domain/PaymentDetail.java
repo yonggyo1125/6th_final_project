@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class PaymentDetail {
 
     @Column(length = 45)
-    private String transactionId;
+    private String paymentKey;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
@@ -28,9 +28,9 @@ public class PaymentDetail {
 
     private LocalDateTime paidAt;
 
-    protected PaymentDetail(String transactionId, String method, LocalDateTime paidAt) {
-        if (!StringUtils.hasText(transactionId)) {
-            throw new PaymentInvalidException("Transaction ID는 필수 입력값입니다.");
+    protected PaymentDetail(String paymentKey, String method, LocalDateTime paidAt) {
+        if (!StringUtils.hasText(paymentKey)) {
+            throw new PaymentInvalidException("Payment Key는 필수 입력값입니다.");
         }
 
         if (!StringUtils.hasText(method)) {
@@ -38,7 +38,7 @@ public class PaymentDetail {
         }
 
 
-        this.transactionId = transactionId;
+        this.paymentKey = paymentKey;
         this.method = PaymentMethod.toEnum(method);
         this.paidAt = paidAt;
     }

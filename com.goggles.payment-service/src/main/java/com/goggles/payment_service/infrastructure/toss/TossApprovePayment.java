@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class TossApprovePayment implements ApprovePayment {
 
     @Override
-    public ApproveResult request(PaymentId paymentId, String transactionId, OrderDetail orderDetail) {
+    public ApproveResult request(PaymentId paymentId, String paymentKey, OrderDetail orderDetail) {
         return null;
     }
 }
