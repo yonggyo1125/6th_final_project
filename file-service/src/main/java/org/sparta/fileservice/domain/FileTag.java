@@ -2,7 +2,10 @@ package org.sparta.fileservice.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sparta.fileservice.domain.exception.FileStorageException;
 
+@Slf4j
 @Getter
 @RequiredArgsConstructor
 public enum FileTag {
@@ -18,5 +21,14 @@ public enum FileTag {
 
     public String getPath(String uploadedDate) {
         return String.format("%s/%s", directory, uploadedDate);
+    }
+
+    public static FileTag from(String tagName) {
+        try {
+            return FileTag.valueOf(tagName.toLowerCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            log.error("지원하지 않는 파일 태그 - 태그: {}, 메세지: {}", tagName, e.getMessage(), e);
+            throw new FileStorageException("지원하지 않는 파일 태그입니다: " + tagName);
+        }
     }
 }
