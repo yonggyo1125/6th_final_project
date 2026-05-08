@@ -18,6 +18,8 @@ public class GcsFileUploader implements FileUploader {
 
     private final Storage storage;
 
+    private
+
     @Override
     public String upload(FileTag tag, FileInfo.FileSource source) {
         return "";
