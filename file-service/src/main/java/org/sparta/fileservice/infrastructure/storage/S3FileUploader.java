@@ -8,6 +8,7 @@ import org.sparta.fileservice.domain.exception.FileStorageException;
 import org.sparta.fileservice.domain.service.FileUploader;
 import org.sparta.fileservice.infrastructure.storage.config.S3StorageProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -23,6 +24,7 @@ import java.io.InputStream;
         havingValue = "s3"
 )
 @RequiredArgsConstructor
+@EnableConfigurationProperties({S3StorageProperties.class})
 public class S3FileUploader implements FileUploader {
 
     private final S3Client s3Client;
