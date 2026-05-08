@@ -1,10 +1,15 @@
 package com.goggles.payment_service.domain;
 
 import com.goggles.common.domain.BaseTime;
+import com.goggles.payment_service.domain.event.PaymentEvent;
+import com.goggles.payment_service.domain.exception.PaymentInvalidException;
 import com.goggles.payment_service.domain.service.ApprovePayment;
+import com.goggles.payment_service.domain.service.ApproveResult;
 import com.goggles.payment_service.domain.service.CancelPayment;
+import com.goggles.payment_service.domain.service.CancelResult;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,13 +65,92 @@ public class Payment extends BaseTime {
      * 2. 주문 정보의 결제 요청 금액과 실제로 결제된 금액이 다른 경우는 변조된 것으로 간주
      * 3. 결제금액이 변조가 되었으면 환불처리를 진행
      */
-    public void approve(String paymentKey, ApprovePayment approvePayment, CancelPayment cancelPayment) {
+    public void approve(String paymentKey, ApprovePayment approvePayment, CancelPayment cancelPayment, PaymentEvent event) {
+        // 이미 승인된 상태면 처리하지 않음
+        if (this.status == PaymentStatus.DONE) {
+            return;
+        }
 
+        // 승인 상태 전이가 가능한지 검증
+        PaymentStatus.validateTransition(this.status, PaymentStatus.DONE);
+
+        // paymentKey는 필수
+        if (!StringUtils.hasText(paymentKey)) {
+            throw new PaymentInvalidException("Payment Key는 필수입력 값입니다.");
+        }
+
+        // 결제 승인 처리
+        ApproveResult result = approvePayment.request(this.paymentId, paymentKey, this.orderDetail);
+        if (!result.success()) {
+            log(this.status, result.paymentLog());
+            event.failed(this);
+            throw new PaymentInvalidException(result.reason());
+        }
+
+        this.paymentDetail = new PaymentDetail(paymentKey, result.method(), result.paidAt());
+
+        // 결제 요청 주문 금액과 실 승인 금액이 일치하지 않는다면 금액이 변조된 것으로 판단 -> 결제 취소
+        long orderPrice = this.orderDetail.getOrderPrice(); // 주문 금액
+        long approvedAmount = result.approvedAmount(); // 실 승인 금액
+        if (orderPrice != approvedAmount) {
+            String message = "실결제 금액과 최초 등록 금액과 불일치";
+            cancelPayment.cancel(this.paymentId, paymentKey, message);
+
+            log(PaymentStatus.ABORTED, result.paymentLog());
+            this.status = PaymentStatus.ABORTED;
+            event.failed(this);
+
+            throw new PaymentInvalidException(message);
+        }
+
+        log(PaymentStatus.DONE, result.paymentLog());
+        this.status = PaymentStatus.DONE;
+
+        // 성공시
+        event.approved(this);
     }
 
-    // 결제 취소
-    public void cancel(String cancelReason, CancelPayment cancelPayment) {
+    /**
+     * 결제 취소
+     * 1. 입금이 확인된 승인 단계(DONE)에서만 가능
+     * 2. 결제 취소 성공/실패시 이벤트 알림
+     */
+    public void cancel(String cancelReason, CancelPayment cancelPayment, PaymentEvent event) {
+        // 이미 취소가 된 상태라면 진행하지 않음
+        if (this.status == PaymentStatus.CANCELLED) {
+            return;
+        }
 
+        // 결제 취소 상태로 전이 가능한지 검증
+        PaymentStatus.validateTransition(this.status, PaymentStatus.CANCELLED);
+
+        if (this.paymentDetail == null) {
+            throw new PaymentInvalidException("취소 처리를 위해 결제 정보는 필수입니다.");
+        }
+
+        String paymentKey = this.paymentDetail.getPaymentKey();
+        if (!StringUtils.hasText(paymentKey)) {
+            throw new PaymentInvalidException("취소 처리를 위해 Payment Key는 필수입니다.");
+        }
+
+        if (!StringUtils.hasText(cancelReason)) {
+            throw new PaymentInvalidException("취소 사유는 필수 입력값입니다.");
+        }
+
+        // 결제 취소 요청
+        CancelResult result = cancelPayment.cancel(this.paymentId, paymentKey, cancelReason);
+        if (!result.success()) {
+            log(this.status, result.paymentLog()); // 로그 기록
+            event.cancelFailed(this);
+            throw new PaymentInvalidException(result.reason());
+        }
+
+        // 성공시 처리
+        this.cancelDetail = new CancelDetail(cancelReason);
+        log(PaymentStatus.CANCELLED, result.paymentLog()); // 로그 기록
+        this.status = PaymentStatus.CANCELLED; // 취소 상태 변경
+
+        event.cancelled(this);
     }
 
     // 결제, 취소, 상태 변경 로그 기록
