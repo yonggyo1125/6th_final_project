@@ -38,3 +38,8 @@ file:
     base:
       path: ${FILE_BASE_PATH:./storage/files}
       url: ${FILE_BASE_URL:/upload/}
+  s3:
+    bucket: my-sparta-bucket
+    region: ap-northeast-2
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
