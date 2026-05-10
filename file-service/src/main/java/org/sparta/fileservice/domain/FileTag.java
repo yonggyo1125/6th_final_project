@@ -19,15 +19,11 @@ public enum FileTag {
     private final String directory;
     private final String description;
 
-    public String getPath(String uploadedDate) {
-        return String.format("%s/%s", directory, uploadedDate);
-    }
-
     public static FileTag from(String tagName) {
         try {
-            return FileTag.valueOf(tagName.toLowerCase());
+            return FileTag.valueOf(tagName.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
-            log.error("지원하지 않는 파일 태그 - 태그: {}, 메세지: {}", tagName, e.getMessage(), e);
+            log.warn("지원하지 않는 파일 태그 - 태그: {}, 메세지: {}", tagName, e.getMessage(), e);
             throw new FileStorageException("지원하지 않는 파일 태그입니다: " + tagName);
         }
     }

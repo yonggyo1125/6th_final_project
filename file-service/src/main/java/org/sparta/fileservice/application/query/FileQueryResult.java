@@ -15,11 +15,10 @@ public record FileQueryResult(
     String extension,
     boolean isImage,
     boolean isVideo,
-    String filePath,
     String fileUrl,
     LocalDateTime createdAt
 ) {
-    public static FileQueryResult from(FileInfo fileInfo) {
+    public static FileQueryResult from(FileInfo fileInfo, String storageEndpoint) {
         return FileQueryResult.builder()
                 .id(fileInfo.getId())
                 .groupId(fileInfo.getGroup().getGroupId())
@@ -29,8 +28,13 @@ public record FileQueryResult(
                 .extension(fileInfo.getMetadata().getExtension())
                 .isImage(fileInfo.getMetadata().isImage())
                 .isVideo(fileInfo.getMetadata().isVideo())
-                .filePath(fileInfo.getFilePath())
+                .fileUrl(getFullUrl(storageEndpoint, fileInfo.getFilePath()))
                 .createdAt(fileInfo.getCreatedAt())
                 .build();
+    }
+
+    private static String getFullUrl(String endpoint, String filePath) {
+        if (!endpoint.endsWith("/")) endpoint += "/";
+        return endpoint + filePath;
     }
 }

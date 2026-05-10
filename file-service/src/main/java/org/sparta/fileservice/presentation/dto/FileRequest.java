@@ -36,7 +36,5 @@ public class FileRequest {
         @NotBlank(message = "그룹 ID는 필수 입력값입니다.")
         private String groupId;
         private String tagName;
-
-
     }
 }

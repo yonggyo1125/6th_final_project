@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Component
@@ -28,11 +30,15 @@ import java.nio.file.StandardCopyOption;
 public class LocalFileUploader implements FileUploader {
 
     private final LocalStorageProperties properties;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Override
     public String upload(FileTag tag, FileInfo.FileSource source) {
+        String today = getTodayStr();
+        String relativePath = String.format("%s/%s", tag.getDirectory(), today);
+
         Path rootPath = Path.of(properties.path()).toAbsolutePath().normalize();
-        Path targetDirectory = rootPath.resolve(tag.name().toLowerCase());
+        Path targetDirectory = rootPath.resolve(relativePath);
 
         try {
             // 업로드 파일을 저장할 디렉토리가 없다면 생성
@@ -50,10 +56,14 @@ public class LocalFileUploader implements FileUploader {
 
             log.info("로컬 파일 업로드 성공 - 업로드 경로: {}", targetFile);
 
-            return tag.name().toLowerCase() + "/" + storeFileName;
+            return relativePath + "/" + storeFileName;
         } catch (IOException e) {
-            log.error("로컬 파일 업로드 실패: {}", e.getMessage(), e);
+            log.error("로컬 파일 업로드 실패 - 업로드 경로: {}, 사유 {}", targetDirectory, e.getMessage(), e);
             throw new FileStorageException("파일 저장 중 시스템 오류가 발생하였습니다.");
         }
+    }
+
+    private String getTodayStr() {
+        return formatter.format(LocalDate.now());
     }
 }

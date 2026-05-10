@@ -15,4 +15,6 @@ public class JPAConfig {
     public JPAQueryFactory queryFactory() {
         return new JPAQueryFactory(em);
     }
+
+
 }
