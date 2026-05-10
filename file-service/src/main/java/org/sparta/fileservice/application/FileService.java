@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.fileservice.application.dto.FileServiceDto;
 import org.sparta.fileservice.domain.FileInfo;
-import org.sparta.fileservice.domain.FileInfoRepository;
+import org.sparta.fileservice.domain.FileRepository;
 import org.sparta.fileservice.domain.FileTag;
 import org.sparta.fileservice.domain.Storage;
 import org.sparta.fileservice.domain.exception.FileNotFoundException;
@@ -21,7 +21,7 @@ public class FileService {
 
     private final FileUploader fileUploader;
     private final FileDownloader fileDownloader;
-    private final FileInfoRepository fileInfoRepository;
+    private final FileRepository fileRepository;
 
     @Value("${file.storage.type}")
     private String storageType;
@@ -42,7 +42,7 @@ public class FileService {
                 fileUploader
         );
 
-        fileInfoRepository.save(fileInfo);
+        fileRepository.save(fileInfo);
 
         log.info("파일 업로드 완료 - 파일 ID: {}, 저장소: {}, 저장경로: {}", fileInfo.getId(), fileInfo.getMetadata().getStorage().getDescription(), fileInfo.getFilePath());
 
@@ -52,7 +52,7 @@ public class FileService {
     @Transactional(readOnly = true)
     public FileServiceDto.FileDownload download(Long fileInfoId) {
         log.info("파일 다운로드 시작 - 파일 ID: {}", fileInfoId);
-        FileInfo fileInfo = fileInfoRepository.findById(fileInfoId).orElseThrow(() -> new FileNotFoundException(fileInfoId));
+        FileInfo fileInfo = fileRepository.findById(fileInfoId).orElseThrow(() -> new FileNotFoundException(fileInfoId));
 
         FileServiceDto.FileDownload downloadDto = FileServiceDto.FileDownload.from(
                 fileDownloader.download(fileInfo)

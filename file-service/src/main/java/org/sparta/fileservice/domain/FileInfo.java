@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @SQLRestriction("deleted_at IS NULL")
-@Table(name="P_FILE_INFO")
+@Table(name="P_FILE_INFO", indexes = {
+        @Index(name = "idx_file_group_query", columnList = "group_id, tag_name, deleted_at, created_at")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class FileInfo {

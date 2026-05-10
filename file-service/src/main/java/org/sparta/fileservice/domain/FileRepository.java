@@ -2,7 +2,7 @@ package org.sparta.fileservice.domain;
 
 import java.util.Optional;
 
-public interface FileInfoRepository {
+public interface FileRepository {
     FileInfo save(FileInfo fileInfo);
     Optional<FileInfo> findById(Long fileInfoId);
 }
