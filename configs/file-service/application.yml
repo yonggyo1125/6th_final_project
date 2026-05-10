@@ -2,14 +2,14 @@ server:
   port: 10003
 
 spring:
-  cloud:
-    gcp:
-      storage:
-        enabled: true
-        bucket: ${GCS_BUCKET_NAME}
-      credentials:
-        location: ${GCP_CREDENTIAL_LOCATION}
-      project-id: ${GCP_PROJECT_ID}
+#  cloud:
+#    gcp:
+#      storage:
+#        enabled: true
+#        bucket: ${GCS_BUCKET_NAME}
+#      credentials:
+#        location: ${GCP_CREDENTIAL_LOCATION}
+#      project-id: ${GCP_PROJECT_ID}
   threads:
     virtual:
       enabled: true
@@ -52,9 +52,9 @@ file:
     base:
       path: ${FILE_BASE_PATH:./storage/files}
       url: ${FILE_BASE_URL:/upload/}
-  s3:
-    bucket: sparta-bucket
-    region: ap-northeast-2
-    access-key: ${AWS_ACCESS_KEY_ID}
-    secret-key: ${AWS_SECRET_ACCESS_KEY}
+#  s3:
+#    bucket: sparta-bucket
+#    region: ap-northeast-2
+#    access-key: ${AWS_ACCESS_KEY_ID}
+#    secret-key: ${AWS_SECRET_ACCESS_KEY}
 
