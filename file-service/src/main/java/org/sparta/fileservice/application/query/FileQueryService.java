@@ -34,7 +34,7 @@ public class FileQueryService {
     }
 
     public List<FileQueryResult> findAll(String groupId, String tagName) {
-        log.info("파일 목록 조회 - GROUP ID: {}, TAGNAME: {}", groupId, tagName);
+        log.info("파일 목록 조회 - 그룹 ID: {}, 태그: {}", groupId, tagName);
 
         FileTag tag = tagName != null ? FileTag.from(tagName): null;
 
