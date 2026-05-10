@@ -1,4 +1,4 @@
-package org.sparta.fileservice.application;
+package org.sparta.fileservice.application.dto;
 
 import lombok.*;
 import org.sparta.fileservice.domain.FileInfo;

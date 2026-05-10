@@ -2,6 +2,7 @@ package org.sparta.fileservice.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sparta.fileservice.application.dto.FileServiceDto;
 import org.sparta.fileservice.domain.FileInfo;
 import org.sparta.fileservice.domain.FileInfoRepository;
 import org.sparta.fileservice.domain.FileTag;
