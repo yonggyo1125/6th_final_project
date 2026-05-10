@@ -30,4 +30,13 @@ public class FileRequest {
                     .build();
         }
     }
+
+    @Data
+    public static class FileSearch {
+        @NotBlank(message = "그룹 ID는 필수 입력값입니다.")
+        private String groupId;
+        private String tagName;
+
+
+    }
 }
