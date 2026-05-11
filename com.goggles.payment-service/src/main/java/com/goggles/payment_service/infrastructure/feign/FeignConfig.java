@@ -4,15 +4,17 @@ import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+@Configuration
 @EnableFeignClients("com.goggles.payment_service")
 public class FeignConfig {
 
-    @Value("${toss.secret-key}")
+    @Value("${TOSS_API_KEY}")
     private String tossSecretKey;
 
     @Bean

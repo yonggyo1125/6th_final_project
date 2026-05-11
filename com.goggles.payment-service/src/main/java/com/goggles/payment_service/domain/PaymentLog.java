@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 @Getter
 @Entity
 @ToString
@@ -34,7 +33,6 @@ public class PaymentLog {
     private PaymentStatus toStatus;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
     private String log;
 
     @CreatedDate

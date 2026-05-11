@@ -54,6 +54,10 @@ dependencies {
 
     // ── JPA (소비자가 Spring Data JPA 를 사용한다고 가정) ────────────────────
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
 
     // ── Spring Web/MVC (GlobalExceptionHandler 용) ───────────────────────────
     implementation("org.springframework:spring-web")
@@ -86,8 +90,6 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka")
     testRuntimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    runtimeOnly("com.h2database:h2")
 
     runtimeOnly("org.postgresql:postgresql")
 }
