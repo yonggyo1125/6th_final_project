@@ -27,7 +27,7 @@ public class PaymentService {
     public UUID createPayment(UUID orderId, String productName, long orderPrice) {
         log.info("결제 등록 시작 - 주문번호: {}, 상품명: {}, 주문금액: {}", orderId, productName, orderPrice);
 
-        Payment payment = Payment.create(orderId, productName, orderPrice);
+        Payment payment = Payment.create(orderId, productName, orderPrice, paymentEvent);
 
         paymentRepository.save(payment);
 

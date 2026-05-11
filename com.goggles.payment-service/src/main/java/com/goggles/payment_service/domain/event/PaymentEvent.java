@@ -1,10 +1,12 @@
 package com.goggles.payment_service.domain.event;
 
-import com.goggles.payment_service.domain.Payment;
+import com.goggles.payment_service.domain.event.dto.PaymentEventDto;
 
 public interface PaymentEvent {
-    void approved(Payment payment); // 결제 승인
-    void failed(Payment payment);
-    void cancelled(Payment payment);
-    void cancelFailed(Payment payment);
+    void created(PaymentEventDto.Created event);
+    void createFailed(PaymentEventDto.CreateFailed event  );
+    void approved(PaymentEventDto.Approved event); // 결제 승인
+    void approvalfailed(PaymentEventDto.ApprovalFailed event);
+    void cancelled(PaymentEventDto.Cancelled event);
+    void cancelFailed(PaymentEventDto.CancelFailed event);
 }

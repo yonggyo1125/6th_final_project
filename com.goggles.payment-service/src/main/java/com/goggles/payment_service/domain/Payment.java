@@ -2,6 +2,7 @@ package com.goggles.payment_service.domain;
 
 import com.goggles.common.domain.BaseTime;
 import com.goggles.payment_service.domain.event.PaymentEvent;
+import com.goggles.payment_service.domain.event.dto.PaymentEventDto;
 import com.goggles.payment_service.domain.exception.PaymentInvalidException;
 import com.goggles.payment_service.domain.service.ApprovePayment;
 import com.goggles.payment_service.domain.service.ApproveResult;
@@ -11,6 +12,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -51,12 +53,20 @@ public class Payment extends BaseTime {
     }
 
     // 결제 생성
-    public static Payment create(UUID orderId, String productName, long orderPrice) {
-        return Payment.builder()
+    public static Payment create(UUID orderId, String productName, long orderPrice, PaymentEvent paymentEvent) {
+        Payment payment = Payment.builder()
                 .orderId(orderId)
                 .productName(productName)
                 .orderPrice(orderPrice)
                 .build();
+
+        // 결제 등록 후 이벤트 발행
+        paymentEvent.created(new PaymentEventDto.Created(
+                orderId,
+                LocalDateTime.now()
+        ));
+
+        return payment;
     }
 
     /**
@@ -76,14 +86,18 @@ public class Payment extends BaseTime {
 
         // paymentKey는 필수
         if (!StringUtils.hasText(paymentKey)) {
-            throw new PaymentInvalidException("Payment Key는 필수입력 값입니다.");
+            String failReason = "Payment Key는 필수입력 값입니다.";
+            event.approvalfailed(PaymentEventDto.ApprovalFailed.from(this, failReason));
+            throw new PaymentInvalidException(failReason);
         }
 
         // 결제 승인 처리
         ApproveResult result = approvePayment.request(this.paymentId, paymentKey, this.orderDetail);
         if (!result.success()) {
             log(this.status, result.paymentLog());
-            event.failed(this);
+
+            event.approvalfailed(PaymentEventDto.ApprovalFailed.from(this, result.reason()));
+
             throw new PaymentInvalidException(result.reason());
         }
 
@@ -98,7 +112,9 @@ public class Payment extends BaseTime {
 
             log(PaymentStatus.ABORTED, result.paymentLog());
             this.status = PaymentStatus.ABORTED;
-            event.failed(this);
+
+            event.approvalfailed(PaymentEventDto.ApprovalFailed.from(this, message));
+
 
             throw new PaymentInvalidException(message);
         }
@@ -107,7 +123,12 @@ public class Payment extends BaseTime {
         this.status = PaymentStatus.DONE;
 
         // 성공시
-        event.approved(this);
+        event.approved(new PaymentEventDto.Approved(
+                this.orderDetail.getOrderId(),
+                this.paymentDetail.getPaymentKey(),
+                this.orderDetail.getOrderPrice(),
+                this.paymentDetail.getPaidAt()
+        ));
     }
 
     /**
@@ -125,23 +146,32 @@ public class Payment extends BaseTime {
         PaymentStatus.validateTransition(this.status, PaymentStatus.CANCELLED);
 
         if (this.paymentDetail == null) {
-            throw new PaymentInvalidException("취소 처리를 위해 결제 정보는 필수입니다.");
+            String failReason = "취소 처리를 위해 결제 정보는 필수입니다.";
+            event.cancelFailed(PaymentEventDto.CancelFailed.from(this, failReason));
+
+            throw new PaymentInvalidException(failReason);
         }
 
         String paymentKey = this.paymentDetail.getPaymentKey();
         if (!StringUtils.hasText(paymentKey)) {
-            throw new PaymentInvalidException("취소 처리를 위해 Payment Key는 필수입니다.");
+            String failReason = "취소 처리를 위해 Payment Key는 필수입니다.";
+            event.cancelFailed(PaymentEventDto.CancelFailed.from(this, failReason));
+            throw new PaymentInvalidException(failReason);
         }
 
         if (!StringUtils.hasText(cancelReason)) {
-            throw new PaymentInvalidException("취소 사유는 필수 입력값입니다.");
+            String failReason = "취소 사유는 필수 입력값입니다.";
+            event.cancelFailed(PaymentEventDto.CancelFailed.from(this, failReason));
+
+            throw new PaymentInvalidException(failReason);
         }
 
         // 결제 취소 요청
         CancelResult result = cancelPayment.cancel(this.paymentId, paymentKey, cancelReason);
         if (!result.success()) {
             log(this.status, result.paymentLog()); // 로그 기록
-            event.cancelFailed(this);
+            event.cancelFailed(PaymentEventDto.CancelFailed.from(this, result.reason()));
+
             throw new PaymentInvalidException(result.reason());
         }
 
@@ -150,7 +180,12 @@ public class Payment extends BaseTime {
         log(PaymentStatus.CANCELLED, result.paymentLog()); // 로그 기록
         this.status = PaymentStatus.CANCELLED; // 취소 상태 변경
 
-        event.cancelled(this);
+        event.cancelled(new PaymentEventDto.Cancelled(
+                this.orderDetail.getOrderId(),
+                this.orderDetail.getOrderPrice(),
+                LocalDateTime.now(),
+                cancelReason
+        ));
     }
 
     // 결제, 취소, 상태 변경 로그 기록
