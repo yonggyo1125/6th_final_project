@@ -16,7 +16,7 @@ import java.util.UUID;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderDetail {
-    @Column(length=45, nullable=false)
+    @Column(length=45, nullable=false, unique=true)
     private UUID orderId;
 
     @Column(length=100, nullable=false)

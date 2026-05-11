@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@EnableConfigurationProperties(PaymentEvent.class)
+@EnableConfigurationProperties(PaymentTopic.class)
 public class PaymentEventImpl implements PaymentEvent {
 
     private final PaymentTopic topic;
