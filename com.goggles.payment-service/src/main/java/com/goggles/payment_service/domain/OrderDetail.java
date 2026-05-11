@@ -40,5 +40,9 @@ public class OrderDetail {
         if (orderPrice <= 0) {
             throw new PaymentInvalidException("결제금액이 유효하지 않습니다.");
         }
+
+        this.orderId = orderId;
+        this.productName = productName;
+        this.orderPrice = orderPrice;
     }
 }

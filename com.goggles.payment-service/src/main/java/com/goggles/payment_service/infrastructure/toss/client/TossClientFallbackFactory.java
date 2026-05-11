@@ -3,7 +3,7 @@ package com.goggles.payment_service.infrastructure.toss.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goggles.payment_service.infrastructure.toss.topic.PaymentTopic;
+import com.goggles.payment_service.infrastructure.topic.PaymentTopic;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
