@@ -35,6 +35,8 @@ dependencies {
     // ── 공용 라이브러리 ───────────────────────────────
     implementation("com.goggles:common-library:1.0.3")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     implementation ("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -54,10 +56,11 @@ dependencies {
 
     // ── JPA (소비자가 Spring Data JPA 를 사용한다고 가정) ────────────────────
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation ("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
+
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
-    annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
 
     // ── Spring Web/MVC (GlobalExceptionHandler 용) ───────────────────────────
     implementation("org.springframework:spring-web")
@@ -100,5 +103,25 @@ tasks.named<Test>("test") {
 spotless {
     java {
         googleJavaFormat()
+    }
+}
+
+val querydslDir = "src/main/generated"
+
+tasks.withType<JavaCompile> {
+    options.generatedSourceOutputDirectory.set(file(querydslDir))
+}
+
+sourceSets {
+    getByName("main") {
+        java {
+            srcDirs(querydslDir)
+        }
+    }
+}
+
+tasks.named("clean") {
+    doLast {
+        delete(file(querydslDir))
     }
 }
