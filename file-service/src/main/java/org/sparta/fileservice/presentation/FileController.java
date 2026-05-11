@@ -79,7 +79,7 @@ public class FileController {
     }
 
     // 파일 목록 조회
-    @GetMapping("/")
+    @GetMapping("/search")
     public List<FileResponse.FileInfo> getFiles(@Valid FileRequest.FileSearch search) {
         String groupId = search.getGroupId();
         String tagName = search.getTagName();

@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -40,5 +41,19 @@ public class FileControllerTest {
                         .param("tagName", "LECTURE_MAIN")
                 .file(file1)
                 .file(file2)).andDo(print());
+    }
+
+    @Test
+    @DisplayName("파일 하나 조회")
+    void fileSearchTest() throws Exception {
+        mockMvc.perform(get("/1/view"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("파일 목록 조회")
+    void fileListSearchTest() throws Exception {
+        mockMvc.perform(get("/search?groupId=testgroup"))
+                .andDo(print());
     }
 }
