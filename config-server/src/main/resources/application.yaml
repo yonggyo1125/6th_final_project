@@ -11,7 +11,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/yonggyo1125/6th_final_project
+          uri: https://github.com/89-49/configs
           default-label: main
           search-paths:
             - configs/common
