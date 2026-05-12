@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Factory - 결제 실패</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="payment-wrapper">
+    <div class="payment-card failure-card">
+        <header class="payment-header">
+            <div class="status-icon icon-failure">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>결제에 실패했습니다</h2>
+            <p class="subtitle">결제 도중 문제가 발생했습니다. 아래 내용을 확인해주세요.</p>
+        </header>
+
+        <section class="error-details">
+            <div class="info-row">
+                <span class="label">에러 코드</span>
+                <span class="value code-text" th:text="${data.code}">ERROR_CODE</span>
+            </div>
+            <div class="info-row vertical">
+                <span class="label">실패 사유</span>
+                <p class="value message-text" th:text="${data.message}">실패 메시지가 여기에 표시됩니다.</p>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn-pay" onclick="history.back()">다시 시도하기</button>
+            <button class="btn-secondary" onclick="location.href='/demo'">홈으로 이동</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

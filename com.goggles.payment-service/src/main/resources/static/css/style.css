@@ -1,0 +1,181 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+}
+
+body {
+    background-color: #E3F2FD; /* 연한 하늘색 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.payment-wrapper {
+    width: 100%;
+    max-width: 500px;
+}
+
+.payment-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.payment-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 700;
+}
+
+.payment-header .subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.order-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+.label {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.value {
+    color: #333;
+    font-weight: 600;
+}
+
+.price {
+    color: #6C63FF; /* 보라색 강조 */
+    font-size: 1.1rem;
+}
+
+.btn-pay {
+    width: 100%;
+    background-color: #6C63FF; /* 메인 보라색 */
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    margin-top: 20px;
+}
+
+.btn-pay:hover {
+    background-color: #5851DB;
+    transform: translateY(-2px);
+}
+
+.btn-pay:active {
+    transform: translateY(0);
+}
+
+/* Toss Widget Custom Margin */
+#payment-method {
+    margin-bottom: 10px;
+}
+
+/* 실패 전용 카드 스타일 */
+.failure-card {
+    border-top: 6px solid #FF4D4D; /* 실패 시 상단에 붉은 포인트 */
+}
+
+/* 상태 아이콘 */
+.status-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFF0F0;
+    border-radius: 50%;
+}
+
+.status-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+/* 에러 상세 영역 */
+.error-details {
+    background: #fdf2f2; /* 아주 연한 붉은색 배경 */
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+.code-text {
+    color: #FF4D4D;
+    font-family: monospace;
+}
+
+.info-row.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.message-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+    word-break: keep-all;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-secondary {
+    width: 100%;
+    background-color: transparent;
+    color: #6C63FF;
+    border: 2px solid #6C63FF;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #F4F3FF;
+}

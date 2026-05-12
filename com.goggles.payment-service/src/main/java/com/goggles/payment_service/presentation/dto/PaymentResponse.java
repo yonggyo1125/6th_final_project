@@ -39,4 +39,12 @@ public class PaymentResponse {
                     .build();
         }
     }
+
+    public record PaymentApprove(
+            UUID paymentId
+    ) {}
+
+    public record PaymentCancel(
+            UUID paymentId
+    ) {}
 }
