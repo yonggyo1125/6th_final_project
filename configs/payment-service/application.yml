@@ -2,9 +2,6 @@ server:
   port: 10006
 
 spring:
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
   threads:
     virtual:
       enabled: true
