@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Slf4j
@@ -44,7 +45,7 @@ public class TossApprovePayment implements ApprovePayment {
             PaymentStatus status = PaymentStatus.valueOf(node.get("status").asText());
 
             // 승인 일시
-            LocalDateTime paidAt = LocalDateTime.parse(node.get("approvedAt").asText());
+            LocalDateTime paidAt = LocalDateTime.parse(node.get("approvedAt").asText(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
             // 승인된 결제금액
             long approvedAmount = node.get("totalAmount").asLong();

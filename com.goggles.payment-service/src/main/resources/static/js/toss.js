@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     // 테스트용 클라이언트 키 (실제 연동 시 전달받은 키로 교체 필요)
-    const clientKey = "test_gck_docs_Ovk5rk1E3wkP19L4bgBvl0OR";
+    const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
     const customerKey = Math.random().toString(36).substring(2, 12); // 비회원 결제용 임시 키
 
     const tossPayments = TossPayments(clientKey);

@@ -10,7 +10,7 @@ public class PaymentRequest {
     // 결제 성공시 데이터
     public record Success(
             UUID orderId,
-            String orderName,
+            String paymentKey,
             long amount
     ) {}
 
