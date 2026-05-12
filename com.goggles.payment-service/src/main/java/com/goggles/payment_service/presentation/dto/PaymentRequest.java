@@ -19,4 +19,9 @@ public class PaymentRequest {
             String code,
             String message
     ) {}
+
+    // 환불시 사유
+    public record Cancel(
+            String reason
+    ) {}
 }

@@ -16,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @ToString
+@Table(name="p_payment_log")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class PaymentLog {

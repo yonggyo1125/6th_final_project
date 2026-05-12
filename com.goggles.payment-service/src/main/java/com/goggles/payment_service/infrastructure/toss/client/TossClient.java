@@ -21,6 +21,6 @@ public interface TossClient {
     ResponseEntity<JsonNode> approve(@RequestHeader("Idempotency-Key") String idempotenceKey, @RequestBody Map<String, Object> params);
 
 
-    @PostMapping(path="/v1/payments/{paymentKey}/cance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/v1/payments/{paymentKey}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<JsonNode> cancel(@PathVariable("paymentKey") String paymentKey, @RequestHeader("Idempotency-Key") String idempotenceKey,@RequestBody Map<String, String> params);
 }
