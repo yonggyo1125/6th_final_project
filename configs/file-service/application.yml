@@ -32,8 +32,10 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 50MB
+      max-file-size: 10MB # 파일 한개당 최대 사이즈
+      max-request-size: 50MB # 전체 업로드 파일 최대 사이즈
+      file-size-threshold: 20MB # 파일 업로드 -> 임시메모리 생성 -> 파일을 이동(local, s3, gcs) // 임시 메모리에 저장하는 것은 20MB 이하, 이상 -> 임시 폴더 저장(/tmp)
+
 
 # 로그 설정
 logging:
@@ -45,16 +47,16 @@ logging:
 # 파일 설정
 file:
   storage:
-    type: local
+    type: local # local, s3, gcs
     endpoint: ${STORAGE_ENDPOINT}
 
   local:
     base:
       path: ${FILE_BASE_PATH:./storage/files}
       url: ${FILE_BASE_URL:/upload/}
-#  s3:
-#    bucket: sparta-bucket
-#    region: ap-northeast-2
-#    access-key: ${AWS_ACCESS_KEY_ID}
-#    secret-key: ${AWS_SECRET_ACCESS_KEY}
+  s3:
+    bucket: sparta-bucket
+    region: ap-northeast-2
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
 

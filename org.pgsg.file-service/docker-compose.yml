@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17
+    container_name: postgres_17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres          # 사용할 사용자 이름
+      POSTGRES_PASSWORD: postgres  # 사용할 비밀번호
+      POSTGRES_DB: postgres      # 생성할 초기 데이터베이스 이름
+      TZ: Asia/Seoul                 # 타임존 설정
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data # 데이터 저장소 연결
+    networks:
+      - postgres_net
+
+networks:
+  postgres_net:
+    driver: bridge
