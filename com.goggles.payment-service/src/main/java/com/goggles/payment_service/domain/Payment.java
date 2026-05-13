@@ -3,11 +3,9 @@ package com.goggles.payment_service.domain;
 import com.goggles.common.domain.BaseTime;
 import com.goggles.payment_service.domain.event.PaymentEvent;
 import com.goggles.payment_service.domain.event.dto.PaymentEventDto;
+import com.goggles.payment_service.domain.exception.PaymentDuplicatedException;
 import com.goggles.payment_service.domain.exception.PaymentInvalidException;
-import com.goggles.payment_service.domain.service.ApprovePayment;
-import com.goggles.payment_service.domain.service.ApproveResult;
-import com.goggles.payment_service.domain.service.CancelPayment;
-import com.goggles.payment_service.domain.service.CancelResult;
+import com.goggles.payment_service.domain.service.*;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.util.StringUtils;
@@ -46,18 +44,26 @@ public class Payment extends BaseTime {
     private List<PaymentLog> paymentLogs = new ArrayList<>();
 
     @Builder
-    protected Payment(UUID orderId, String productName, long orderPrice) {
+    protected Payment(UUID orderId, String productName, long orderPrice, UUID customerId, String customerName, String customerEmail) {
         this.paymentId = PaymentId.of();
-        this.orderDetail = new OrderDetail(orderId, productName, orderPrice);
+        this.orderDetail = new OrderDetail(orderId, productName, orderPrice, customerId, customerName, customerEmail);
         this.status = PaymentStatus.READY; // 결제 등록시 기본값 READY
     }
 
     // 결제 생성
-    public static Payment create(UUID orderId, String productName, long orderPrice, PaymentEvent paymentEvent) {
+    public static Payment create(UUID orderId, String productName, long orderPrice, UUID customerId, String customerName, String customerEmail, OrderChecker checker, PaymentEvent paymentEvent) {
+        // 중복 등록인지 체크
+        if (checker.isDuplicated(orderId)) {
+            throw new PaymentDuplicatedException(orderId);
+        }
+
         Payment payment = Payment.builder()
                 .orderId(orderId)
                 .productName(productName)
                 .orderPrice(orderPrice)
+                .customerId(customerId)
+                .customerName(customerName)
+                .customerEmail(customerEmail)
                 .build();
 
         // 결제 등록 후 이벤트 발행

@@ -1,5 +1,6 @@
 package com.goggles.payment_service.application;
 
+import com.goggles.payment_service.application.dto.PaymentServiceDto;
 import com.goggles.payment_service.domain.Payment;
 import com.goggles.payment_service.domain.PaymentId;
 import com.goggles.payment_service.domain.PaymentRepository;
@@ -7,6 +8,7 @@ import com.goggles.payment_service.domain.event.PaymentEvent;
 import com.goggles.payment_service.domain.exception.PaymentNotFoundException;
 import com.goggles.payment_service.domain.service.ApprovePayment;
 import com.goggles.payment_service.domain.service.CancelPayment;
+import com.goggles.payment_service.domain.service.OrderChecker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,23 @@ public class PaymentService {
     private final ApprovePayment approvePayment;
     private final CancelPayment cancelPayment;
     private final PaymentEvent paymentEvent;
+    private final OrderChecker orderChecker;
 
     @Transactional
-    public UUID createPayment(UUID orderId, String productName, long orderPrice) {
-        log.info("결제 등록 시작 - 주문번호: {}, 상품명: {}, 주문금액: {}", orderId, productName, orderPrice);
+    public UUID createPayment(PaymentServiceDto.Create dto) {
+        log.info("결제 등록 시작 - 주문번호: {}, 상품명: {}, 주문금액: {}", dto.orderId(), dto.productName(), dto.orderPrice());
 
-        Payment payment = Payment.create(orderId, productName, orderPrice, paymentEvent);
+        Payment payment = Payment.create(
+                dto.orderId(),
+                dto.productName(),
+                dto.orderPrice(),
+                dto.customerId(),
+                dto.customerName(),
+                dto.customerEmail(),
+                orderChecker,
+                paymentEvent
+        );
+
 
         paymentRepository.save(payment);
 

@@ -6,6 +6,6 @@ import java.util.UUID;
 public class PaymentDuplicatedException extends ConflictException {
 
   public PaymentDuplicatedException(UUID orderId) {
-    super("이미 결제 완료된 주문입니다. orderId = " + orderId);
+    super("이미 등록된 결제입니다. orderId = " + orderId);
   }
 }

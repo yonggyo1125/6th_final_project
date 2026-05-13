@@ -8,5 +8,8 @@ import java.util.UUID;
 public record OrderPaymentPending(
         UUID orderId,
         long amount,
-        String orderName
+        String orderName,
+        UUID customerId,
+        String customerName,
+        String customerEmail
 ) {}

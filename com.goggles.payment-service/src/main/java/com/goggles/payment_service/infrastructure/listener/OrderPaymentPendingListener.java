@@ -3,6 +3,7 @@ package com.goggles.payment_service.infrastructure.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goggles.common.event.annotation.IdempotentConsumer;
 import com.goggles.payment_service.application.PaymentService;
+import com.goggles.payment_service.application.dto.PaymentServiceDto;
 import com.goggles.payment_service.infrastructure.listener.dto.OrderPaymentPending;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,16 @@ public class OrderPaymentPendingListener {
         try {
             OrderPaymentPending data = objectMapper.readValue(message.getPayload(), OrderPaymentPending.class);
 
-            paymentService.createPayment(data.orderId(), data.orderName(), data.amount());
+            paymentService.createPayment(
+                    PaymentServiceDto.Create.builder()
+                            .orderId(data.orderId())
+                            .orderPrice(data.amount())
+                            .productName(data.orderName())
+                            .customerId(data.customerId())
+                            .customerName(data.customerName())
+                            .customerEmail(data.customerEmail())
+                            .build()
+            );
 
             ack.acknowledge(); // 메세지의 offset 적용
 

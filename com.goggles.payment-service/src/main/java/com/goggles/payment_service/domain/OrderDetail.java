@@ -24,11 +24,15 @@ public class OrderDetail {
 
     private long orderPrice;
 
+    private UUID customerId;
+    private String customerName;
+    private String customerEmail;
+
     /**
      * 1. 주문번호, 주문상품, 금액은 필수 입력 값
      *
      */
-    protected OrderDetail(UUID orderId, String productName, long orderPrice) {
+    protected OrderDetail(UUID orderId, String productName, long orderPrice, UUID customerId, String customerName, String customerEmail) {
         if (orderId == null) {
             throw new PaymentInvalidException("주문 ID는 필수 입력값 입니다.");
         }
@@ -41,8 +45,23 @@ public class OrderDetail {
             throw new PaymentInvalidException("결제금액이 유효하지 않습니다.");
         }
 
+        if (customerId == null) {
+            throw new PaymentInvalidException("주문자 ID는 필수 입력값 입니다.");
+        }
+
+        if (!StringUtils.hasText(customerName)) {
+            throw new PaymentInvalidException("주문자명은 필수 입력값 입니다.");
+        }
+
+        if (!StringUtils.hasText(customerEmail)) {
+            throw new PaymentInvalidException("주문자 이메일은 필수 입력값 입니다.");
+        }
+
         this.orderId = orderId;
         this.productName = productName;
         this.orderPrice = orderPrice;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
     }
 }
