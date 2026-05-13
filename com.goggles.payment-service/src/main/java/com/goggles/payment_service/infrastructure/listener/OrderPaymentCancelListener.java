@@ -35,7 +35,7 @@ public class OrderPaymentCancelListener {
 
             Payment payment = OrderPaymentHelper.getPayment(orderId, queryRepository);
 
-            paymentService.cancelPayment(payment.getPaymentId().getId(), reason);
+            paymentService.cancelPayment(payment.getPaymentId().getId(), reason, true);
             ack.acknowledge();
 
             log.info("결제 취소 성공 - 결제 ID: {}, 주문 ID: {}", payment.getPaymentId().getId(), orderId);

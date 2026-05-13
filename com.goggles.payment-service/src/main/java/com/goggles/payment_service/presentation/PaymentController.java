@@ -3,10 +3,12 @@ package com.goggles.payment_service.presentation;
 import com.goggles.payment_service.application.PaymentService;
 import com.goggles.payment_service.application.query.PaymentQueryResult;
 import com.goggles.payment_service.application.query.PaymentQueryService;
+import com.goggles.payment_service.infrastructure.security.UserDetailsImpl;
 import com.goggles.payment_service.presentation.dto.PaymentRequest;
 import com.goggles.payment_service.presentation.dto.PaymentResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +43,7 @@ public class PaymentController {
     @PostMapping("/{orderId}/cancel")
     public PaymentResponse.PaymentCancel cancelPayment(@PathVariable("orderId") UUID orderId, @RequestBody PaymentRequest.Cancel request) {
         PaymentQueryResult result = paymentQueryService.getPayment(orderId);
-        paymentService.cancelPayment(result.paymentId(), request.reason());
+        paymentService.cancelPayment(result.paymentId(), request.reason(), false);
 
         return new PaymentResponse.PaymentCancel(result.paymentId());
     }
@@ -63,5 +65,11 @@ public class PaymentController {
                 )
         );
         return "demo/main";
+    }
+
+    @ResponseBody
+    @GetMapping("/test")
+    public void test(@AuthenticationPrincipal UserDetailsImpl user) {
+        log.info("logged User: {}", user);
     }
 }
