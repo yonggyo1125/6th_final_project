@@ -33,7 +33,7 @@ public class FileMeta {
     private long contentLength; // 파일 길이
 
 
-    protected FileMeta(Storage storage, String fileName, String extension, String contentType, long contentLength) {
+    protected FileMeta(Storage storage, String fileName, String contentType, long contentLength) {
         if (storage == null) {
             throw new BadRequestException("파일 저장소는 필수 입력값 입니다.");
         }
@@ -42,7 +42,38 @@ public class FileMeta {
             throw new BadRequestException("파일명은 필수 입력값 입니다.");
         }
 
-
+        this.storage = storage;
         this.contentType = StringUtils.hasText(contentType) ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        this.fileName = fileName;
+        this.contentLength = contentLength;
+        this.extension = extractExtension(fileName);
+    }
+
+
+    // 확장자가 없는 파일은?
+    // abc.
+    private String extractExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex == -1) {
+            return "";
+        }
+
+        return fileName.substring(dotIndex+1).toLowerCase();
+    }
+
+    /**
+     * Content-Type
+     *      image/png, image/gif, image/jpeg ...
+     */
+    public boolean isImage() {
+        return StringUtils.hasText(contentType) && contentType.startsWith("image/");
+    }
+
+    /**
+     * Content-Type
+     *  video/mp3, video/ogg, ...
+     */
+    public boolean isVideo() {
+        return StringUtils.hasText(contentType) && contentType.startsWith("video/");
     }
 }
