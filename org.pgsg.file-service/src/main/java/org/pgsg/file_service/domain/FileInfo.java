@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 import org.pgsg.common.domain.BaseEntity;
+import org.pgsg.file_service.domain.exception.FileStorageException;
+import org.pgsg.file_service.domain.service.FileUploader;
+import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -36,8 +39,24 @@ public class FileInfo extends BaseEntity {
         this.filePath = filePath;
     }
 
-    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source) {
+    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader) {
+        // 파일 업로드 진행
+        String filePath = uploader.upload(tag, source);
 
+        if (!StringUtils.hasText(filePath)) {
+            throw new FileStorageException("파일 저장소 업로드에 실패하였습니다.");
+        }
+
+        // 파일 정보 엔티티 완성
+        return FileInfo.builder()
+                .storage(storage)
+                .groupId(groupId)
+                .tag(tag)
+                .fileName(source.originalFileName())
+                .contentType(source.contentType())
+                .contentLength(source.contentLength())
+                .filePath(filePath)
+                .build();
     }
 
     public record FileSource(
@@ -46,4 +65,9 @@ public class FileInfo extends BaseEntity {
             String contentType,
             long contentLength
     ) {}
+
+    // MASTER 또는 파일 소유자만 삭제 가능
+    public void delete() {
+
+    }
 }
