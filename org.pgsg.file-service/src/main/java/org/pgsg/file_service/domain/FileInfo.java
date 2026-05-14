@@ -42,7 +42,7 @@ public class FileInfo extends BaseEntity {
         this.filePath = filePath;
     }
 
-    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader, RoleChecker checker) throws FileStorageException {
+    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader, RoleChecker checker) {
         // 파일 업로드는 로그인 사용자만 가능
         if (!checker.isLoggedIn()) {
             throw new UnauthorizedException("파일 업로드는 로그인이 필요합니다.");
