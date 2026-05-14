@@ -5,7 +5,9 @@ import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 import org.pgsg.common.domain.BaseEntity;
 import org.pgsg.file_service.domain.exception.FileStorageException;
+import org.pgsg.file_service.domain.exception.ForbiddenException;
 import org.pgsg.file_service.domain.service.FileUploader;
+import org.pgsg.file_service.domain.service.RoleChecker;
 import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
@@ -40,6 +42,8 @@ public class FileInfo extends BaseEntity {
     }
 
     public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader) {
+        // 파일 업로드는 로그인 사용자만 가능
+
         // 파일 업로드 진행
         String filePath = uploader.upload(tag, source);
 
@@ -67,7 +71,11 @@ public class FileInfo extends BaseEntity {
     ) {}
 
     // MASTER 또는 파일 소유자만 삭제 가능
-    public void delete() {
+    public void delete(RoleChecker checker) {
+        if (!checker.isMaster() && !checker.isMine(this)) {
+            throw new ForbiddenException("파일 삭제권한이 없습니다.");
+        }
 
+        this.delete(checker.getLoggedUserId());
     }
 }

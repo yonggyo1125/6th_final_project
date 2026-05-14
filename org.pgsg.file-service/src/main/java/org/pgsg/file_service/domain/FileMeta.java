@@ -38,7 +38,7 @@ public class FileMeta {
             throw new BadRequestException("파일 저장소는 필수 입력값 입니다.");
         }
 
-        if (!StringUtils.hasLength(fileName)) {
+        if (!StringUtils.hasText(fileName)) {
             throw new BadRequestException("파일명은 필수 입력값 입니다.");
         }
 
