@@ -36,7 +36,7 @@ public class LocalFileDownloader implements FileDownloader {
         Path rootPath = Path.of(properties.path()).toAbsolutePath().normalize();
         Path filePath = rootPath.resolve(fileInfo.getFilePath()).normalize();
 
-        if (!filePath.endsWith(rootPath)) {
+        if (!filePath.startsWith(rootPath)) {
             log.error("유효하지 않은 파일 경로 접근 시도: {}", filePath);
             throw new FileStorageException("유효하지 않은 파일 접근입니다.");
         }
