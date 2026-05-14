@@ -67,6 +67,7 @@ public class FileInfo extends BaseEntity {
                 .build();
     }
 
+    @Builder
     public record FileSource(
             InputStream inputStream,
             String originalFileName,

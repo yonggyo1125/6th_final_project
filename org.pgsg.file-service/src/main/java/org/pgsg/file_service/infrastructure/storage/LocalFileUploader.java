@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -49,17 +50,22 @@ public class LocalFileUploader implements FileUploader {
                 Files.createDirectories(targetDirectory);
             }
 
+            // 파일 업로드 파일명 생성
+            String storageFileName = StorageHelper.getStorageFileName(source
+                    .originalFileName());
+            // 파일 업로드 경로 생성
+            Path targetFile = targetDirectory.resolve(storageFileName);
+
             // 파일 업로드
+            Files.copy(source.inputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+
+            log.info("로컬 파일 업로드 성공 - 업로드 경로: {}", targetFile);
+
+            return relativePath + "/" + storageFileName;
 
         } catch (IOException e) {
             log.error("로컬 파일 업로드 실패 - 업로드 경로: {}, 사유: {}", targetDirectory, e.getMessage(), e);
             throw new FileStorageException("파일 저장 중 시스템 오류가 발생했습니다.");
         }
-
-        return "";
-    }
-
-    private String getStorageFileName(String fileName) {
-        return fileName.lastIndexOf(".") != -1 ? fileName.substring(0, fileName.lastIndexOf(".") + 1) : "";
     }
 }
