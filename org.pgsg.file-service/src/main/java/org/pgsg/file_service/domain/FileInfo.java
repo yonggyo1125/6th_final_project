@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.pgsg.common.domain.BaseEntity;
 import org.pgsg.file_service.domain.exception.FileStorageException;
 import org.pgsg.file_service.domain.exception.ForbiddenException;
+import org.pgsg.file_service.domain.exception.UnauthorizedException;
 import org.pgsg.file_service.domain.service.FileUploader;
 import org.pgsg.file_service.domain.service.RoleChecker;
 import org.springframework.util.StringUtils;
@@ -41,8 +42,11 @@ public class FileInfo extends BaseEntity {
         this.filePath = filePath;
     }
 
-    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader) {
+    public static FileInfo upload(Storage storage, String groupId, FileTag tag, FileSource source, FileUploader uploader, RoleChecker checker) throws FileStorageException {
         // 파일 업로드는 로그인 사용자만 가능
+        if (!checker.isLoggedIn()) {
+            throw new UnauthorizedException("파일 업로드는 로그인이 필요합니다.");
+        }
 
         // 파일 업로드 진행
         String filePath = uploader.upload(tag, source);
