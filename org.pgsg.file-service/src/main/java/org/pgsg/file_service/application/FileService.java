@@ -7,6 +7,9 @@ import org.pgsg.file_service.domain.FileInfo;
 import org.pgsg.file_service.domain.FileRepository;
 import org.pgsg.file_service.domain.FileTag;
 import org.pgsg.file_service.domain.Storage;
+import org.pgsg.file_service.domain.exception.FileNotFoundException;
+import org.pgsg.file_service.domain.query.FileQueryRepository;
+import org.pgsg.file_service.domain.service.FileDownloader;
 import org.pgsg.file_service.domain.service.FileUploader;
 import org.pgsg.file_service.domain.service.RoleChecker;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +23,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
+    private final FileQueryRepository fileQueryRepository;
     private final FileRepository fileRepository;
     private final FileUploader fileUploader;
+    private final FileDownloader fileDownloader;
     private final RoleChecker roleChecker;
 
     @Value("${file.storage.type:local}")
@@ -42,5 +47,19 @@ public class FileService {
         fileRepository.save(fileInfo);
 
         return fileInfo.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public FileServiceDto.FileDownload download(UUID fileId) {
+        FileInfo fileInfo = getFileInfo(fileId);
+
+        return FileServiceDto.FileDownload.from(
+                fileDownloader.download(fileInfo)
+        );
+    }
+
+    private FileInfo getFileInfo(UUID fileId) {
+        return fileQueryRepository.findById(fileId)
+                .orElseThrow(() -> new FileNotFoundException(fileId));
     }
 }
