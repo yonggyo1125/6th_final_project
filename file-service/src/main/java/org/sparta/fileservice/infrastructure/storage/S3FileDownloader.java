@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 public class S3FileDownloader implements FileDownloader {
 
     private final S3Client s3Client;
-    private S3StorageProperties properties;
+    private final S3StorageProperties properties;
 
     @Override
     public FileDownloadContent download(FileInfo fileInfo) {
