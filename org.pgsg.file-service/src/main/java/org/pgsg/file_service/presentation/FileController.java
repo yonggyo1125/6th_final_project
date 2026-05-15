@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.pgsg.file_service.application.FileService;
 import org.pgsg.file_service.application.dto.FileServiceDto;
+import org.pgsg.file_service.application.query.FileQueryService;
 import org.pgsg.file_service.presentation.dto.FileRequest;
 import org.pgsg.file_service.presentation.dto.FileResponse;
 import org.springframework.core.io.InputStreamResource;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileController {
     private final FileService fileService;
+    private final FileQueryService fileQueryService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -55,5 +57,28 @@ public class FileController {
                 .contentLength(download.contentLength())
                 .body(new InputStreamResource(download.inputStream()));
                 
+    }
+
+    @DeleteMapping("/{fileId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFile(@PathVariable("fileId") UUID fileId) {
+        fileService.delete(fileId);
+    }
+
+
+    @GetMapping("/{fileId}/details")
+    public FileResponse.FileInfo getFileInfo(@PathVariable("fileId") UUID fileId) {
+        return FileResponse.FileInfo.from(fileQueryService.findById(fileId));
+    }
+
+    @GetMapping("/search")
+    public List<FileResponse.FileInfo> getFiles(@Valid FileRequest.FileSearch search) {
+        String groupId = search.groupId();
+        String tag = search.tag();
+
+        return fileQueryService.findAll(groupId, tag)
+                .stream()
+                .map(FileResponse.FileInfo::from)
+                .toList();
     }
 }

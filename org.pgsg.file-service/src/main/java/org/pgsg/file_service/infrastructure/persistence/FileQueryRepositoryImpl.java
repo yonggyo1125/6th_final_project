@@ -1,12 +1,15 @@
 package org.pgsg.file_service.infrastructure.persistence;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.pgsg.file_service.domain.FileInfo;
+import org.pgsg.file_service.domain.FileTag;
 import org.pgsg.file_service.domain.QFileInfo;
 import org.pgsg.file_service.domain.query.FileQueryRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,5 +32,22 @@ public class FileQueryRepositoryImpl implements FileQueryRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    @Override
+    public List<FileInfo> findAll(String groupId, FileTag tag) {
+        QFileInfo fileInfo = QFileInfo.fileInfo;
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(fileInfo.group.groupId.eq(groupId))
+                .and(fileInfo.deletedAt.isNull());
+        if (tag != null) {
+            builder.and(fileInfo.group.tag.eq(tag));
+        }
+
+        return queryFactory
+                .selectFrom(fileInfo)
+                .where(builder)
+                .orderBy(fileInfo.createdAt.asc())
+                .fetch();
     }
 }
