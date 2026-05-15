@@ -31,7 +31,6 @@ public class GcsStorageConfig {
 
     @Bean
     public Storage googleCloundStorage() throws IOException {
-        log.info("GCP 설정 체크: {}", properties);
         if (StringUtils.hasText(properties.keyPath())) {
             String cleanPath = properties.keyPath().trim();
             if (cleanPath.startsWith("/") && !cleanPath.startsWith("file:")) {
