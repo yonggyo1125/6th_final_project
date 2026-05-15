@@ -11,7 +11,10 @@ import org.pgsg.file_service.infrastructure.storage.config.S3StorageProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 @Slf4j
@@ -30,8 +33,21 @@ public class S3FileDownloader implements FileDownloader {
     @Override
     public FileDownloadContent download(FileInfo fileInfo) {
         try {
+            GetObjectRequest request = GetObjectRequest.builder()
+                    .bucket(properties.bucket())
+                    .key(fileInfo.getFilePath())
+                    .build();
 
-            return null;
+            ResponseInputStream<GetObjectResponse> inputStream = s3Client.getObject(request);
+            GetObjectResponse response = inputStream.response();
+
+            return FileDownloadContent.builder()
+                    .inputStream(inputStream)
+                    .fileName(fileInfo.getMetadata().getFileName())
+                    .contentType(response.contentType())
+                    .contentLength(response.contentLength())
+                    .build();
+
         } catch (NoSuchKeyException e) {
             log.error("AWS S3에 파일을 찾을 수 없음 - bucket: {}, key: {}, 사유: {}", properties.bucket(), fileInfo.getFilePath(), e.getMessage(), e);
             throw new FileNotFoundException(fileInfo.getId());
