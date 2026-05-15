@@ -4,18 +4,19 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
+@Slf4j
 @Configuration
 @ConditionalOnProperty(
         name = "file.storage.type",
@@ -26,11 +27,19 @@ import java.nio.file.StandardOpenOption;
 public class GcsStorageConfig {
 
     private final GcsStorageProperties properties;
+    private final ResourceLoader resourceLoader;
 
     @Bean
     public Storage googleCloundStorage() throws IOException {
+        log.info("GCP 설정 체크: {}", properties);
         if (StringUtils.hasText(properties.keyPath())) {
-            try (InputStream inputStream = Files.newInputStream(Path.of(properties.keyPath()), StandardOpenOption.READ)) {
+            String cleanPath = properties.keyPath().trim();
+            if (cleanPath.startsWith("/") && !cleanPath.startsWith("file:")) {
+                cleanPath = "file:" + cleanPath;
+            }
+
+            Resource resource = resourceLoader.getResource(cleanPath);
+            try (InputStream inputStream = resource.getInputStream()) {
                     return StorageOptions.newBuilder()
                             .setProjectId(properties.projectId())
                             .setCredentials(GoogleCredentials.fromStream(inputStream))
