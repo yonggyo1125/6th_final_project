@@ -38,3 +38,4 @@ out/
 generated/
 storage/files/
 logs/
+gcp_key.json

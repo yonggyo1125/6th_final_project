@@ -66,12 +66,12 @@ public class FileController {
     }
 
 
-    @GetMapping("/{fileId}/details")
+    @GetMapping(path = "/{fileId}/details", produces = MediaType.APPLICATION_JSON_VALUE)
     public FileResponse.FileInfo getFileInfo(@PathVariable("fileId") UUID fileId) {
         return FileResponse.FileInfo.from(fileQueryService.findById(fileId));
     }
 
-    @GetMapping("/search")
+    @GetMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FileResponse.FileInfo> getFiles(@Valid FileRequest.FileSearch search) {
         String groupId = search.groupId();
         String tag = search.tag();
